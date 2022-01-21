@@ -5,3 +5,6 @@ makefile
 Dockerfile
 docker-compose.yaml
 .dockerignore
+
+Dockerfile.test
+docker-compose.test.yaml
