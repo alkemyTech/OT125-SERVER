@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const asyncWrapper = require('../utils/asyncWrapper');
 const userRepository = require('../repository/user');
 
@@ -5,12 +6,16 @@ const userRepository = require('../repository/user');
  * @route POST /users/register
  */
 module.exports.register = asyncWrapper(async (req, res, next) => {
-  // TDOD: add validations and sanitazion
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const body = { ...req.body };
 
   const [user, err] = await userRepository.saveOne(body);
   if (err) {
-    // hanndle error
+    // @TODO: hanndle error
     return res.status(500).json({});
   }
 
@@ -21,19 +26,24 @@ module.exports.register = asyncWrapper(async (req, res, next) => {
  * @route POST /users/login
  */
 module.exports.login = asyncWrapper(async (req, res, next) => {
-  // TDOD: add validations and sanitazion
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { email, password } = req.body;
 
   const [user, err] = userRepository.getByEmail(email);
   if (err) {
-    // hanndle error
+    // @TODO: hanndle error
     return res.status(500).json({});
   }
   const validPass = await user.validatePassword(password);
 
   if (!validPass) return res.status(401).json({});
+
+  // @TODO: add session/authorization code
   res.json(user);
-  // TODO: add session/authorization code
 });
 
 /**
