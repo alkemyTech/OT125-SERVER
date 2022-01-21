@@ -17,10 +17,12 @@ module.exports.register = asyncWrapper(async (req, res, next) => {
   const [user, err] = await userRepository.saveOne(body);
   if (err) {
     errJSON = handleError(err);
-    return res.status(errJSON.statusCode).json({ error: errJSON.errMessage });
+    return res
+      .status(errJSON.statusCode)
+      .json({ errors: [{ msg: errJSON.errMessage }] });
   }
 
-  res.json(user);
+  res.json({ data: user });
 });
 
 /**
@@ -37,12 +39,15 @@ module.exports.login = asyncWrapper(async (req, res, next) => {
   const [user, err] = await userRepository.getByEmail(email);
   if (err) {
     errJSON = handleError(err);
-    return res.status(errJSON.statusCode).json({ error: errJSON.errMessage });
+    return res
+      .status(errJSON.statusCode)
+      .json({ errors: [{ msg: errJSON.errMessage }] });
   }
 
   const validPass = await user.validatePassword(password);
-  if (!validPass) return res.status(401).json({});
+  if (!validPass)
+    return res.status(401).json({ errors: [{ msg: 'invalid credentials' }] });
 
   // @TODO: add session/authorization code
-  res.json(user);
+  res.json({ data: user });
 });
