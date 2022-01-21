@@ -2,16 +2,6 @@ const db = require('../models/index');
 const User = db['User'];
 
 /**
- * validates request and loads payload con request
- * to move to /middlewares
- */
-module.exports.authenticate = asyncWrapper(async (req, res, next) => {
-  // TODO: authentication and extraction of payload
-  let payload;
-  req.userPayload = payload;
-});
-
-/**
  * middleware that fetchs user given id and loads it in the req obj
  * intended to be used for endpoints
  * @route ALL /users/:id
@@ -19,7 +9,7 @@ module.exports.authenticate = asyncWrapper(async (req, res, next) => {
 module.exports.fetchUser = asyncWrapper(async (req, res, next) => {
   let user;
   switch (req.method) {
-    case 'THISCOULDBE "GET"':
+    case 'GET':
       // makes sense eagerly load role of user?
       break;
     default:
