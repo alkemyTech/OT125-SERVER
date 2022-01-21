@@ -4,11 +4,15 @@
  * @returns {Object}
  */
 module.exports.handleError = (error) => {
-  console.log(error);
   let statusCode, errMessage;
   switch (error.name) {
     case 'not_found':
-      (statusCode = 404), (errMessage = error.message);
+      if (error.message.includes('no user found with email')) {
+        statusCode = 400;
+      } else {
+        statusCode = 404;
+      }
+      errMessage = error.message;
       break;
 
     case 'SequelizeForeignKeyConstraintError':
