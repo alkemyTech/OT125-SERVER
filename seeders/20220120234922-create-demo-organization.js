@@ -7,6 +7,7 @@ module.exports = {
       image:'img.png',
       address: 'test av 1234',
       phone: 33445566,
+      email: 'organization@test.com',
       welcomeText: 'Organization welcome text example',
       aboutUsText: 'Another text example',
       createdAt: new Date,
