@@ -97,7 +97,7 @@ module.exports.fetchUser = asyncWrapper(async (req, res, next) => {
  * @route GET /users/:id
  */
 module.exports.getUser = asyncWrapper(async (req, res, next) => {
-  res.status(200).json(user: req.user)
+  res.status(200).json(req.user);
 });
 
 /**
