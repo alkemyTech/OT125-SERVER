@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
+const userRepository = require('../repositories/user');
 const asyncWrapper = require('../utils/asyncWrapper');
-const userRepository = require('../repository/user');
+const { handleError } = require('../utils/errorHandler');
 
 /**
  * @route POST /users/register
@@ -15,8 +16,8 @@ module.exports.register = asyncWrapper(async (req, res, next) => {
 
   const [user, err] = await userRepository.saveOne(body);
   if (err) {
-    // @TODO: hanndle error
-    return res.status(500).json({});
+    errJSON = handleError(err);
+    return res.status(errJSON.statusCode).json({ error: errJSON.errMessage });
   }
 
   res.json(user);
@@ -33,13 +34,13 @@ module.exports.login = asyncWrapper(async (req, res, next) => {
 
   const { email, password } = req.body;
 
-  const [user, err] = userRepository.getByEmail(email);
+  const [user, err] = await userRepository.getByEmail(email);
   if (err) {
-    // @TODO: hanndle error
-    return res.status(500).json({});
+    errJSON = handleError(err);
+    return res.status(errJSON.statusCode).json({ error: errJSON.errMessage });
   }
-  const validPass = await user.validatePassword(password);
 
+  const validPass = await user.validatePassword(password);
   if (!validPass) return res.status(401).json({});
 
   // @TODO: add session/authorization code
