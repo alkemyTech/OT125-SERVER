@@ -22,6 +22,8 @@ module.exports.register = asyncWrapper(async (req, res, next) => {
       .json({ errors: [{ msg: errJSON.errMessage }] });
   }
 
+  delete user.dataValues.password;
+  delete user.dataValues.deletedAt;
   res.json({ data: user });
 });
 
@@ -49,5 +51,7 @@ module.exports.login = asyncWrapper(async (req, res, next) => {
     return res.status(401).json({ errors: [{ msg: 'invalid credentials' }] });
 
   // @TODO: add session/authorization code
+  delete user.dataValues.password;
+  delete user.dataValues.deletedAt;
   res.json({ data: user });
 });
