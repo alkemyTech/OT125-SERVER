@@ -1,32 +1,18 @@
 const asyncWrapper = require('../utils/asyncWrapper');
-const db = require('../models/index');
-const User = db['User'];
+const userRepository = require('../repository/user');
 
 /**
  * @route POST /users/register
  */
 module.exports.register = asyncWrapper(async (req, res, next) => {
   // TDOD: add validations and sanitazion
-  const { firstName, lastName, email, image, password, roleId } = req.body;
+  const body = { ...req.body };
 
-  let user = User.build({
-    firstName,
-    lastName,
-    email,
-    image,
-    password,
-    roleId,
-  });
-
-  try {
-    await user.save();
-  } catch (e) {
-    // TODO: error handling
-    next(e);
-    return;
+  const [user, err] = await userRepository.saveOne(body);
+  if (err) {
+    // hanndle error
+    return res.status(500).json({});
   }
-
-  // TODO: add session/authorization code
 
   res.json(user);
 });
@@ -38,24 +24,16 @@ module.exports.login = asyncWrapper(async (req, res, next) => {
   // TDOD: add validations and sanitazion
   const { email, password } = req.body;
 
-  let user = await User.findOne({ where: { email } });
-  if (!user) return res.status(404).json({ err: 'not registered' });
-  console.log(user);
+  const [user, err] = userRepository.getByEmail(email);
+  if (err) {
+    // hanndle error
+    return res.status(500).json({});
+  }
   const validPass = await user.validatePassword(password);
 
   if (!validPass) return res.status(401).json({});
   res.json(user);
   // TODO: add session/authorization code
-});
-
-/**
- * validates request and loads payload con request
- * to move to /middlewares
- */
-module.exports.authenticate = asyncWrapper(async (req, res, next) => {
-  // TODO: authentication and extraction of payload
-  let payload;
-  req.userPayload = payload;
 });
 
 /**
@@ -66,30 +44,6 @@ module.exports.authenticate = asyncWrapper(async (req, res, next) => {
  * @TODO
  */
 module.exports.getUsers = asyncWrapper(async (req, res, next) => {});
-
-/**
- * middleware that fetchs user given id and loads it in the req obj
- * intended to be used for endpoints
- * @route ALL /users/:id
- */
-module.exports.fetchUser = asyncWrapper(async (req, res, next) => {
-  let user;
-  switch (req.method) {
-    case 'THISCOULDBE "GET"':
-      // makes sense eagerly load role of user?
-      break;
-    default:
-      user = await User.findByPk(req.params.id);
-      break;
-  }
-
-  if (!user)
-    return res
-      .status(404)
-      .json({ error: `user with id ${req.params.id} not found ` });
-
-  req.user = user;
-});
 
 /**
  * makes sense? how should be implemented
