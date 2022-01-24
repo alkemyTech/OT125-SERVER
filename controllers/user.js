@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 const userRepository = require('../repositories/user');
 const asyncWrapper = require('../utils/asyncWrapper');
 const { handleError } = require('../utils/errorHandler');
+const JWT = require('../services/jwt');
 
 /**
  * @route POST /users/register
@@ -24,7 +25,10 @@ module.exports.register = asyncWrapper(async (req, res, next) => {
 
   delete user.dataValues.password;
   delete user.dataValues.deletedAt;
-  res.json({ data: user });
+
+  const token = JWT.sign(user.dataValues);
+
+  res.json({ data: { user, token } });
 });
 
 /**
@@ -50,8 +54,10 @@ module.exports.login = asyncWrapper(async (req, res, next) => {
   if (!validPass)
     return res.status(400).json({ errors: [{ msg: 'invalid credentials' }] });
 
-  // @TODO: add session/authorization code
   delete user.dataValues.password;
   delete user.dataValues.deletedAt;
-  res.json({ data: user });
+
+  const token = JWT.sign(user.dataValues);
+
+  res.json({ data: { user, token } });
 });
