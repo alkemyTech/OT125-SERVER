@@ -18,6 +18,8 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
+
+    await queryInterface.bulkDelete('Role', null, {truncate:true})
     /**
      * Add commands to revert seed here.
      *
