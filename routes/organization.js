@@ -5,6 +5,8 @@ const controller = require('../controllers/orgController');
 
 router.get('/', controller.orgGet);
 
+router.get('/:id', controller.orgGetOne);
+
 router.post('/', controller.orgUpdate);
 
 router.detele('/:id', controller.orgDelete);

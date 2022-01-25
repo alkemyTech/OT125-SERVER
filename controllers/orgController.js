@@ -5,6 +5,10 @@ exports.orgGet = function(req,res) {
     res.send('NOT IMPLEMENTED: Get all the organization')
 };
 
+exports.orgGetOne = function(req,res) {
+    res.send('NOT IMPLEMENTED: Get one organization')
+};
+
 exports.orgCreate = function(req,res) {
     res.send('NOT IMPLEMENTED: Organization create')
 };
