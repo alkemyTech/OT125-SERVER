@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  Role.init({
+  Organization.init({
     name: DataTypes.STRING,
     image: DataTypes.STRING,
     address: DataTypes.STRING,
