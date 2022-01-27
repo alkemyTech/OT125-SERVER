@@ -8,22 +8,26 @@ module.exports = {
         }).catch(err => {
             res.status(500).json({ error: err })
         })
-},
-
-    getCategories: (req, res) => {
-        res.json({ msg: "controller working" })
     },
 
-        getCategory: (req, res) => {
+    getCategories: (req, res) => {
+        repo.getCategories().then(({ statusCode, response }) => {
+            res.status(statusCode).json(response)
+        }).catch(err => {
+            res.status(500).json({ error: err })
+        })
+    },
 
-        },
+    getCategory: (req, res) => {
 
-            updateCategory: (req, res) => {
+    },
 
-            },
+    updateCategory: (req, res) => {
 
-                deleteCategory: (req, res) => {
+    },
 
-                }
+    deleteCategory: (req, res) => {
+
+    }
 
 }

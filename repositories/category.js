@@ -15,7 +15,7 @@ module.exports.createCategory = async (category) => {
         }
     }).then(dbResult => {
         if (!dbResult[1]) {
-            return responseParser(errP('duplicatedEntry', { name: 'Category'}))
+            return responseParser(errP('duplicatedEntry', { name: 'Category' }))
         }
         return responseParser({ statusCode: 201, object: dbResult[0], type: 'Category' })
     }).catch(SequelizeError => {
@@ -23,4 +23,15 @@ module.exports.createCategory = async (category) => {
     })
 
     return result
+}
+
+
+module.exports.getCategories = async () => {
+
+    /* Space for pagination in a few days */
+
+    const res = await Categories.findAll({ attributes: ['id', 'name'] })
+        .then(dbResult => { return { statusCode: 200, response: dbResult } })
+
+    return res;
 }
