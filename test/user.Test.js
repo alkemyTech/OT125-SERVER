@@ -15,7 +15,7 @@ describe('Register users', async () => {
       roleId: 1,
     },
     expectedBody: {
-      // this is in request.body.data.user
+      // this is in request.body.user
       id: 2,
       firstName: 'firstName',
       lastName: 'lastname',
@@ -34,9 +34,9 @@ describe('Register users', async () => {
       .expect(testSuccess.expectedStatus);
 
     for (const [key, value] of Object.entries(testSuccess.expectedBody)) {
-      expect(response.body.data.user).to.have.property(key, value);
+      expect(response.body.user).to.have.property(key, value);
     }
-    expect(response.body.data.token).to.be.a('string');
+    expect(response.body.token).to.be.a('string');
   });
 
   // ///////////////////////////////////
@@ -108,7 +108,7 @@ describe('Login users', async () => {
       password: '1234',
     },
     expectedBody: {
-      // this is in request.body.data.user
+      // this is in request.body.user
       id: 1,
       firstName: 'Usuario',
       lastName: 'Demo',
@@ -128,9 +128,9 @@ describe('Login users', async () => {
       .expect(testSuccess.expectedStatus);
 
     for (const [key, value] of Object.entries(testSuccess.expectedBody)) {
-      expect(response.body.data.user).to.have.property(key, value);
+      expect(response.body.user).to.have.property(key, value);
     }
-    expect(response.body.data.token).to.be.a('string');
+    expect(response.body.token).to.be.a('string');
   });
 
   // //////////////////////////
