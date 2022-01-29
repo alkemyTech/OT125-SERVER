@@ -1,5 +1,4 @@
 const { Organization } = require('../models/index');
-//const errorHandler = require('../utils/errorHandler');
 
 module.exports.getOneOrg = async(orgId) => {
     try {
