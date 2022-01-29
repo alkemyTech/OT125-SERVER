@@ -5,8 +5,9 @@ module.exports = (response) =>{
         const {statusCode,message} = response.error
         return{statusCode,response:{ error:message }}
     }else{
-        const {statusCode,object,type} = response
-        return {statusCode,response:{ data:{ type: type, ...object}}}
+        const {statusCode,object} = response
+        console.log(object)
+        return {statusCode,response:{ data:{...object.dataValues}}}
     }
 
 }

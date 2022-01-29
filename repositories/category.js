@@ -17,7 +17,7 @@ module.exports.createCategory = async (category) => {
         if (!dbResult[1]) {
             return responseParser(errP('duplicatedEntry', { name: 'Category' }))
         }
-        return responseParser({ statusCode: 201, object: dbResult[0], type: 'Category' })
+        return responseParser({ statusCode: 201, object: dbResult[0]})
     }).catch(SequelizeError => {
         return responseParser(errP('sequelize', { name: 'Category', pk: 'id' }, SequelizeError))
     })
