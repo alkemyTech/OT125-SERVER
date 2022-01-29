@@ -28,7 +28,7 @@ module.exports.register = asyncWrapper(async (req, res, next) => {
 
   const token = JWT.sign(user.dataValues);
 
-  res.json({ user, token });
+  res.status(201).json({ user, token });
 });
 
 /**
