@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/orgController');
+const repo = require('../repositories/organization');
 
 
 router.get('/', controller.orgGet);
 
-router.get('/:id', controller.orgGetOne);
+router.get('/public/:id', controller.orgGetOne, repo.getOneOrg);
 
 router.post('/', controller.orgUpdate);
 
