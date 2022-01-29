@@ -7,7 +7,6 @@
     "dev": "nodemon -L --exec \"npm start\"",
     "test": "mocha || true",
     "preTest": "npx sequelize-cli db:seed:undo:all && npx sequelize-cli db:seed:all "
-    "start": "nodemon ./bin/www"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -21,7 +20,6 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "nodemon": "^2.0.15",
-    "sequelize": "^6.3.5"
     "mysql2": "^2.3.3",
     "sequelize": "^6.14.0"
   },
@@ -29,8 +27,7 @@
     "chai": "^4.3.4",
     "mocha": "^9.1.4",
     "nodemon": "^2.0.15",
-    "sequelize-cli": "^6.2.0",
-    "supertest": "^6.2.2"
+    "supertest": "^6.2.2",
     "sequelize-cli": "^6.4.1"
   }
 }
