@@ -1,15 +1,18 @@
 const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+const ejs = require("ejs");
 
+// const welcomeTemplate = require('../views/');
 
 module.exports.welcomeEmail = async (user) =>{
-    console.log(user);
-    
+
+    var welcomeTemplate = await ejs.renderFile("views/welcomeTemplate.ejs")
+
     const msg = {
         to: user.email, // Change to your recipient
         from: process.env.MAIL_ADMIN, // Change to your verified sender
         subject: 'Welcome',
-        html: '<h3>Welcome</h3>'
+        html: `${welcomeTemplate}`
     }
     try{
         await sgMail.send(msg)

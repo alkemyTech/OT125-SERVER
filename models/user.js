@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
         beforeCreate: async function (user) {
           user.password = await Password.toHash(user.password);
         },
-        afterCreate: async function( user){
+        beforeCreate: async function( user){
           await welcomeEmail.welcomeEmail(user)
         }
       },
