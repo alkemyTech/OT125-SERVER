@@ -1,0 +1,211 @@
+openapi: 3.0.0
+info:
+  title: ONG API
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:8000
+
+security:
+  - BearerAuth: []
+
+paths:
+  /auth/register:
+    post:
+      summary: Creates an user and returns an access token
+      tags:
+        - authorization
+      requestBody:
+        description: information of the account to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: email@email.com
+                firstName:
+                  type: string
+                  example: Llewyn
+                lastName:
+                  type: string
+                  example: Davis
+                image:
+                  type: string
+                  example: https://pics.filmaffinity.com/A_prop_sito_de_Llewyn_Davis-206373785-large.jpg
+                roleId:
+                  type: number
+                  example: 1
+                password:
+                  type: string
+                  example: password
+                passwordConfirmation:
+                  type: string
+                  example: password
+              required:
+                - email
+                - firstName
+                - lastName
+                - roleId
+                - password
+                - passwordConfirmation
+      responses:
+        '201':
+          $ref: '#/components/responses/validAuth'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '500':
+          $ref: '#/components/responses/GenericError'
+
+  /auth/login:
+    post:
+      summary: Validates credentials and returns access token
+      tags:
+        - authorization
+      requestBody:
+        description: credentials to login into account
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: email@email.com
+                password:
+                  type: string
+                  example: password
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          $ref: '#/components/responses/validAuth'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '403':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+          example: email@email.com
+        password:
+          type: string
+          example: password
+        firstName:
+          type: string
+          example: Llewyn
+        lastName:
+          type: string
+          example: Davis
+        image:
+          type: string
+          example: https://pics.filmaffinity.com/A_prop_sito_de_Llewyn_Davis-206373785-large.jpg
+        roleId:
+          type: number
+          example: 1
+        createdAt:
+          type: string
+          example: 2022-01-29T14:08:56.919Z
+        updatedAt:
+          type: string
+          example: 2022-01-29T14:08:56.919Z
+        deletedAt:
+          type: string
+          example: null
+  responses:
+    JWT:
+      description: token
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+    validAuth:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              user:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: email@email.com
+                  firstName:
+                    type: string
+                    example: Llewyn
+                  lastName:
+                    type: string
+                    example: Davis
+                  image:
+                    type: string
+                    example: https://pics.filmaffinity.com/A_prop_sito_de_Llewyn_Davis-206373785-large.jpg
+                  roleId:
+                    type: number
+                    example: 1
+                  createdAt:
+                    type: string
+                    example: 2022-01-29T14:08:56.919Z
+                  updatedAt:
+                    type: string
+                    example: 2022-01-29T14:08:56.919Z
+              token:
+                type: string
+                example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+    ValidationErrors:
+      description: A JSON array of errors
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    msg:
+                      type: string
+                    param:
+                      type: string
+                    location:
+                      type: string
+    GenericError:
+      description: A json array of errors
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    msg:
+                      type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: jwt
+      description: 'note: non-oauth scopes are not defined at the securityScheme level'
+
+tags:
+  - name: authorization
