@@ -19,7 +19,11 @@ module.exports = {
     },
 
     getCategory: (req, res) => {
-
+        repo.getCategory(req.params.id).then(({ statusCode, response }) => {
+            res.status(statusCode).json(response)
+        }).catch(err => {
+            res.status(500).json({ error: err })
+        })
     },
 
     updateCategory: (req, res) => {

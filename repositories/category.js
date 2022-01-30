@@ -35,3 +35,14 @@ module.exports.getCategories = async () => {
 
     return res;
 }
+
+
+module.exports.getCategory = async (id) => {
+
+    const res = await Categories.findOne({ where:{id:id}})
+        .then(dbResult => { 
+            if(!dbResult) return { statusCode:404, response:{error:`Category with id ${id} not found.`}}
+            return { statusCode: 200, response: dbResult } })
+
+    return res;
+}
