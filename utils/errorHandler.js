@@ -4,8 +4,9 @@
  * @param {entity} entity entityObject, example: entity:{ name:"User", pk:"email" }
  * @returns {Object}
  */
-module.exports.SequelizeErrorParser = (error, entity) => {
+module.exports.SequelizeErrorParser = (error) => {
   let errResult;
+  const { entity } = error;
 
   if (error.message === "Validation error" || error.name === 'SequelizeValidationError') {
     errResult = {
@@ -42,36 +43,36 @@ module.exports.SequelizeErrorParser = (error, entity) => {
 
 /**
  * Takes an Error and returns a parsed version of it to be sent as response
- * @param {string} type string, example: "notFound"
- * @param {entity} entity entityObject, example: entity:{ name:"User", pk:"email" }
- * @param {errData} errData (optional) only valid in SequelizeErrors
+ * @param {Error} error 
  * @returns {response} responseObject: { error:{ message:"Something happen", statusCode:500 } }
  */
-module.exports.errorParser = (type, entity, errData) => {
+module.exports.handleError = (error) => {
 
   let errResult;
+  const {name,entity} = error
 
-  switch (type) {
-
-    case 'sequelize':
-      if (!errData) errResult = { message: 'Unexpected error.', statusCode: 500 }
-      errResult = { error: this.SequelizeErrorParser(errData, entity) }
-      break;
-
-    case 'notFound':
+  switch (name) {    
+    case 'not_found':
       errResult = {
-        message: `Not found ${entity.name} with ${entity.pk} provided.`,
+        message: `${entity.name} with ${entity.key} ${entity.keyValue} doesn't exists.`,
         statusCode: 404
       }
       break;
 
-    case 'duplicatedEntry': {
+    case 'duplicated_entry': {
       errResult = {
-        message: `The ${entity.name} already exists in DB.`,
+        message: `The ${entity.name} with ${entity.key} ${entity.keyValue} already exists in DB.`,
         statusCode: 409
       }
     } break;
 
+    default:
+      if(error.name.includes('Sequelize')){
+      errResult = { error: this.SequelizeErrorParser(error) }
+      break;
+      }else{
+        errResult = { message: 'Unexpected error.', statusCode: 500 }
+      }
   }
 
   return { error: errResult }

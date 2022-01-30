@@ -1,5 +1,5 @@
 const { Categories } = require('../models/index')
-const { errorParser: errP } = require('../utils/errorHandler')
+const { handleError: errP } = require('../utils/errorHandler')
 const responseParser = require('../utils/responseFormatter')
 
 
@@ -15,11 +15,14 @@ module.exports.createCategory = async (category) => {
         }
     }).then(dbResult => {
         if (!dbResult[1]) {
-            return responseParser(errP('duplicatedEntry', { name: 'Category' }))
+            const err = new Error()
+            err.name = 'duplicated_entry'
+            err.entity = { type: 'Category',key:'name',keyValue:dbResult[0].name}
+            return responseParser(errP(err))
         }
-        return responseParser({ statusCode: 201, object: dbResult[0]})
+        return responseParser({ statusCode: 201, object: dbResult[0] })
     }).catch(SequelizeError => {
-        return responseParser(errP('sequelize', { name: 'Category', pk: 'id' }, SequelizeError))
+        return responseParser(errP(SequelizeError))
     })
 
     return result
@@ -31,18 +34,24 @@ module.exports.getCategories = async () => {
     /* Space for pagination in a few days */
 
     const res = await Categories.findAll({ attributes: ['id', 'name'] })
-        .then(dbResult => { return { statusCode: 200, response: dbResult } })
+        .then(dbResult => { return responseParser({ statusCode: 200, object: dbResult }) })
 
     return res;
 }
 
 
 module.exports.getCategory = async (id) => {
-
-    const res = await Categories.findOne({ where:{id:id}})
-        .then(dbResult => { 
-            if(!dbResult) return { statusCode:404, response:{error:`Category with id ${id} not found.`}}
-            return { statusCode: 200, response: dbResult } })
+    const res = await Categories.findOne({ where: { id: id } })
+        .then(dbResult => {
+            if (!dbResult) {
+                const err = new Error()
+                err.name = 'not_found';
+                err.entity = { name: 'Category', key: 'id', keyValue:id }
+                return responseParser(errP(err))
+            }
+            return responseParser({ statusCode: 200, object: dbResult })
+        }
+        )
 
     return res;
 }
