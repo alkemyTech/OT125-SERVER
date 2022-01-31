@@ -11,7 +11,7 @@ router.get('/:id');
 //POST
 router.post('/', validator.create,controller.create);
 //PATCH
-router.patch('/');
+router.put('/:id',validator.validateId,controller.update);
 //DELETE
 router.delete('/');
 
