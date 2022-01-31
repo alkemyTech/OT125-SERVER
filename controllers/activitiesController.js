@@ -13,8 +13,7 @@ exports.create = asyncWrapper(async (req, res, next) => {
   }
   const body = { name: req.body.name, content: req.body.content, image: req.body.image }
 
-  const result = await repository.create(body)
-  res.json( result )
+  await repository.create(body, cb => res.json(cb))
 
 });
 

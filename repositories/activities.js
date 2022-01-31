@@ -1,7 +1,7 @@
-const {activities} = require('../models/index');
+const { activities } = require('../models/index');
 const { handleError } = require('../utils/errorHandler');
 
-exports.create = async (activity) => {
+exports.create = async (activity, cb) => {
   activities.findOrCreate({
     where: {
       name: activity.name,
@@ -14,18 +14,18 @@ exports.create = async (activity) => {
     }
   })
     .then(result => {
-    if (!result[1]) {
-      let err = new Error(`Activity already exits`);
-      err.name = 'SequelizeUniqueConstraintError';
+      if (!result[1]) {
+        let err = new Error(`Activity already exists`);
+        err.name = 'SequelizeUniqueConstraintError';
+        errJSON = handleError(err)
+        cb(err)
+
+      }
+      cb(result[0])
+
+    }).catch(err => {
       errJSON = handleError(err)
-      return errJSON
-
-    }
-    return result[0]
-
-  }).catch(err => {
-    errJSON = handleError(err)
-    return errJSON
-  })
+      cb(errJSON)
+    })
 
 }
