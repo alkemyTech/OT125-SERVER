@@ -14,8 +14,9 @@ exports.orgCreate = function(req,res) {
     res.send('NOT IMPLEMENTED: Organization create')
 };
 
-exports.orgUpdate = function(req,res) {
-    res.send('NOT IMPLEMENTED: Organization update')
+exports.orgUpdate = async function(req,res) {
+    const data = await repo.updateOrg(req.params.id,req.body);
+    res.json(data);
 };
 
 exports.orgDelete = function(req,res) {
