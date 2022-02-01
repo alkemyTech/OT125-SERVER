@@ -14,7 +14,7 @@ describe('Register users', async () => {
       passwordConfirmation: 'password',
     },
     expectedBody: {
-      id: 2,
+      id: 21,
       firstName: 'firstName',
       lastName: 'lastname',
       email: 'email@email.com',
@@ -100,14 +100,14 @@ describe('Register users', async () => {
 describe('Login users', async () => {
   const testSuccess = {
     body: {
-      email: 'test@test.com',
+      email: 'test1@test.com',
       password: '1234',
     },
     expectedBody: {
       id: 1,
-      firstName: 'Usuario',
+      firstName: 'Usuario1',
       lastName: 'Demo',
-      email: 'test@test.com',
+      email: 'test1@test.com',
       image:
         'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
       roleId: 1,
