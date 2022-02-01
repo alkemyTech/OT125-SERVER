@@ -11,8 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Organization.init(
-    {
+  Organization.init({
       name: DataTypes.STRING,
       image: DataTypes.STRING,
       address: DataTypes.STRING,
@@ -26,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: 'Organization',
       paranoid: true,
-    }
-  );
+    });
+
   return Organization;
 };

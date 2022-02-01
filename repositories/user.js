@@ -25,8 +25,9 @@ module.exports.getByEmail = async (email) => {
   try {
     let user = await db.User.findOne({ where: { email } });
     if (!user) {
-      let err = new Error(`no user found with email ${email}`);
+      let err = new Error();
       err.name = 'not_found';
+      err.entity = { name: 'User', key: 'email', keyValue: email }
       return [null, err];
     }
     return [user, null];
