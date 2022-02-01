@@ -35,9 +35,6 @@ paths:
                 image:
                   type: string
                   example: https://pics.filmaffinity.com/A_prop_sito_de_Llewyn_Davis-206373785-large.jpg
-                roleId:
-                  type: number
-                  example: 1
                 password:
                   type: string
                   example: password

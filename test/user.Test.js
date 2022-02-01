@@ -12,20 +12,18 @@ describe('Register users', async () => {
         'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
       password: 'password',
       passwordConfirmation: 'password',
-      roleId: 1,
     },
     expectedBody: {
-      // this is in request.body.user
-      id: 2,
+      id: 21,
       firstName: 'firstName',
       lastName: 'lastname',
       email: 'email@email.com',
       image:
         'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
-      roleId: 1,
+      roleId: 2,
       // dates not included  to facilitate test
     },
-    expectedStatus: 200,
+    expectedStatus: 201,
   };
   it('should register a user successfully', async () => {
     const response = await request(app)
@@ -51,7 +49,6 @@ describe('Register users', async () => {
           'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
         password: 'password',
         passwordConfirmation: 'passNotEqual',
-        roleId: 1,
       },
       expectedBody: {
         errors: [
@@ -75,7 +72,6 @@ describe('Register users', async () => {
           'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
         password: 'password',
         passwordConfirmation: 'password',
-        roleId: 1,
       },
       expectedBody: {
         errors: [
@@ -104,15 +100,14 @@ describe('Register users', async () => {
 describe('Login users', async () => {
   const testSuccess = {
     body: {
-      email: 'test@test.com',
+      email: 'test1@test.com',
       password: '1234',
     },
     expectedBody: {
-      // this is in request.body.user
       id: 1,
-      firstName: 'Usuario',
+      firstName: 'Usuario1',
       lastName: 'Demo',
-      email: 'test@test.com',
+      email: 'test1@test.com',
       image:
         'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
       roleId: 1,
