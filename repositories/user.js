@@ -34,3 +34,16 @@ module.exports.getByEmail = async (email) => {
     return [null, e];
   }
 };
+module.exports.deleteUser= async (ID)=>{
+  try{
+    let deleted= await db.User.destroy({
+        where: {
+          id: ID
+        }
+      });
+    return [deleted, null]
+  }
+  catch(e){
+    return[null, e]
+  }
+}

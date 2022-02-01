@@ -55,3 +55,17 @@ module.exports.login = asyncWrapper(async (req, res, next) => {
   delete user.dataValues.deletedAt;
   res.json({ data: user });
 });
+
+module.exports.delete= asyncWrapper( async (req,res,next)=>{
+  const {id} = req.params
+
+  const [user, err]= userRepository.deleteUser(id)
+  if(err){
+    errJSON = handleError(err);
+    return res
+    .status(errJSON.statusCode)
+    .json({ errors: [{ msg: errJSON.errMessage }] });
+  } 
+  console.log(user);
+  return res.status(200).json({data: user})
+})
