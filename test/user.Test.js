@@ -12,20 +12,18 @@ describe('Register users', async () => {
         'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
       password: 'password',
       passwordConfirmation: 'password',
-      roleId: 1,
     },
     expectedBody: {
-      // this is in request.body.user
       id: 2,
       firstName: 'firstName',
       lastName: 'lastname',
       email: 'email@email.com',
       image:
         'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
-      roleId: 1,
+      roleId: 2,
       // dates not included  to facilitate test
     },
-    expectedStatus: 200,
+    expectedStatus: 201,
   };
   it('should register a user successfully', async () => {
     const response = await request(app)
@@ -51,7 +49,6 @@ describe('Register users', async () => {
           'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
         password: 'password',
         passwordConfirmation: 'passNotEqual',
-        roleId: 1,
       },
       expectedBody: {
         errors: [
@@ -75,7 +72,6 @@ describe('Register users', async () => {
           'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
         password: 'password',
         passwordConfirmation: 'password',
-        roleId: 1,
       },
       expectedBody: {
         errors: [
@@ -108,7 +104,6 @@ describe('Login users', async () => {
       password: '1234',
     },
     expectedBody: {
-      // this is in request.body.user
       id: 1,
       firstName: 'Usuario',
       lastName: 'Demo',
