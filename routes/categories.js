@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/CategoryController')
 const { createValidator, getOneValidator } = require('../middleware/categoryValidation')
-const { isAdmin } = require('../middleware/isAdmin')
+const  isAdmin = require('../middleware/isAdmin')
 const { authenticate: auth } = require('../middleware/authenticate')
 
 /* GET categories */
