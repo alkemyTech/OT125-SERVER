@@ -35,7 +35,7 @@ module.exports.register = asyncWrapper(async (req, res, next) => {
     errJSON = handleError(err);
     return res
       .status(errJSON.statusCode)
-      .json({ errors: [{ msg: errJSON.errMessage }] });
+      .json({ errors: [{ msg: errJSON.message }] });
   }
 
   delete user.dataValues.password;
@@ -62,7 +62,7 @@ module.exports.login = asyncWrapper(async (req, res, next) => {
     errJSON = handleError(err);
     return res
       .status(errJSON.statusCode)
-      .json({ errors: [{ msg: errJSON.errMessage }] });
+      .json({ errors: [{ msg: errJSON.message }] });
   }
 
   const validPass = await user.validatePassword(password);
@@ -77,16 +77,16 @@ module.exports.login = asyncWrapper(async (req, res, next) => {
   res.json({ user, token });
 });
 
-module.exports.delete= asyncWrapper( async (req,res,next)=>{
-  const {id} = req.params
+module.exports.delete = asyncWrapper(async (req, res, next) => {
+  const { id } = req.params;
 
-  const [user, err]= userRepository.deleteUser(id)
-  if(err){
+  const [user, err] = userRepository.deleteUser(id);
+  if (err) {
     errJSON = handleError(err);
     return res
-    .status(errJSON.statusCode)
-    .json({ errors: [{ msg: errJSON.errMessage }] });
-  } 
+      .status(errJSON.statusCode)
+      .json({ errors: [{ msg: errJSON.message }] });
+  }
   console.log(user);
-  return res.status(200).json({data: user})
-})
+  return res.status(200).json({ data: user });
+});
