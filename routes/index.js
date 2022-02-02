@@ -3,7 +3,8 @@ var router = express.Router();
 /* GET home page. */
 
 const roleRouter = require('./role')
-const userRouter = require('./users')
+
+const usersRouter = require('./users')
 
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -11,5 +12,6 @@ router.get('/', function(req, res, next) {
 
 router.use('/user', userRouter )
 router.use('/role', roleRouter )
+router.use('/users', usersRouter )
 
 module.exports = router;

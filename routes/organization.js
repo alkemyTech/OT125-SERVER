@@ -12,5 +12,4 @@ router.delete('/:id', controller.orgDelete);
 
 router.patch('/:id', controller.orgUpdate);
 
-
 module.exports = router;

@@ -1,6 +1,6 @@
 node_modules
 .env
-
+package-lock.json
 makefile
 Dockerfile
 docker-compose.yaml
@@ -8,3 +8,4 @@ docker-compose.yaml
 
 Dockerfile.test
 docker-compose.test.yaml
+package-lock.json
