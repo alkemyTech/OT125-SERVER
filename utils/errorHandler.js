@@ -30,7 +30,6 @@ module.exports.SequelizeErrorParser = (error) => {
           statusCode: 409,
           message: `Unique value duplicated on ${entity.name}.`,
         };
-        console.log(error);
         break;
 
       default:
