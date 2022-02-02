@@ -1,34 +1,80 @@
 /**
- * Takes an error and returns a parsed version of it to be sent as response
+ * Takes an SequelizeError and returns a parsed version of it to be sent as response
  * @param {Error} error
+ * @param {entity} entity entityObject, example: entity:{ name:"User", pk:"email" }
  * @returns {Object}
  */
+module.exports.SequelizeErrorParser = (error) => {
+  let errResult;
+  const { entity } = error;
+
+  if (error.message === "Validation error" || error.name === 'SequelizeValidationError') {
+    errResult = {
+      statusCode: 400,
+      message: error.errors[0].message
+    }
+  }else{
+    switch (error.name) {
+      case 'SequelizeForeignKeyConstraintError':
+        errResult = {
+          statusCode: 400,
+          message: `One or more of the provided ids, doesn't corresponds to an ${entity.name}.`
+        }
+        break;
+
+      case 'SequelizeUniqueConstraintError':
+        errResult = {
+          statusCode: 409,
+          message: `Unique value duplicated on ${entity.name}.`
+        }
+        break;
+
+      default:
+        errResult = { statusCode: 500, message: 'internal_server_error' };
+        break;
+    }
+
+  }
+
+  
+  return errResult;
+};
+
+
+/**
+ * Takes an Error and returns a parsed version of it to be sent as response
+ * @param {Error} error 
+ * @returns {response} responseObject: { error:{ message:"Something happen", statusCode:500 } }
+ */
 module.exports.handleError = (error) => {
-  let statusCode, errMessage;
-  switch (error.name) {
+
+  let errResult;
+  const {name,entity} = error
+
+  switch (name) {    
     case 'not_found':
-      if (error.message.includes('no user found with email')) {
-        statusCode = 400;
-      } else {
-        statusCode = 404;
+      errResult = {
+        message: `${entity.name} with ${entity.key} ${entity.keyValue} doesn't exists.`,
+        statusCode: 404
       }
-      errMessage = error.message;
       break;
 
-    case 'SequelizeForeignKeyConstraintError':
-      (statusCode = 400),
-        (errMessage =
-          "one or more of the provided ids, doesn't corresponds to an entity on the DB");
-      break;
-
-    case 'SequelizeUniqueConstraintError':
-      statusCode = 400;
-      errMessage = 'unique value duplicated on entity';
-      break;
+    case 'duplicated_entry': {
+      errResult = {
+        message: `The ${entity.name} with ${entity.key} ${entity.keyValue} already exists in DB.`,
+        statusCode: 409
+      }
+    } break;
 
     default:
-      (statusCode = 500), (errMessage = 'internal_server_error');
+      if(error.name.includes('Sequelize')){
+      errResult = { error: this.SequelizeErrorParser(error) }
       break;
+      }else{
+        errResult = { message: 'Unexpected error.', statusCode: 500 }
+      }
   }
-  return { statusCode, errMessage };
-};
+
+  return { error: errResult }
+
+}

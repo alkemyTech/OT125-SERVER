@@ -11,21 +11,23 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Organization.init({
-    name: DataTypes.STRING,
-    image: DataTypes.STRING,
-    address: DataTypes.STRING,
-    phone: DataTypes.INTEGER,
-    email: DataTypes.STRING,
-    welcomeText: DataTypes.TEXT,
-    aboutUsText: DataTypes.TEXT,
-    deletedAt: DataTypes.DATE
-  },
-  {
-    sequelize,
-    modelName: 'Organization',
-    paranoid: true
-  });
-  
+  Organization.init(
+    {
+      name: DataTypes.STRING,
+      image: DataTypes.STRING,
+      address: DataTypes.STRING,
+      phone: DataTypes.INTEGER,
+      email: DataTypes.STRING,
+      welcomeText: DataTypes.TEXT,
+      aboutUsText: DataTypes.TEXT,
+      deletedAt: DataTypes.DATE,
+    },
+    {
+      sequelize,
+      modelName: 'Organization',
+      paranoid: true,
+    }
+  );
+
   return Organization;
 };
