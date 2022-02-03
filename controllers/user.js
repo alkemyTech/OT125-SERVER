@@ -71,8 +71,7 @@ module.exports.login = asyncWrapper(async (req, res, next) => {
  * @route GET /users
  */
 module.exports.getAll = asyncWrapper(async (req, res, next) => {
-  // @TODO: add pagination
-  const [users, err] = await userRepository.getAll();
+  const [result, err] = await userRepository.getAll(req.query);
   if (err) {
     errJSON = handleError(err);
     return res
@@ -80,7 +79,7 @@ module.exports.getAll = asyncWrapper(async (req, res, next) => {
       .json({ errors: [{ msg: errJSON.message }] });
   }
 
-  res.json({ users });
+  res.json(result);
 });
 
 /**

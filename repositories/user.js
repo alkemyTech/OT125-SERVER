@@ -40,15 +40,30 @@ module.exports.getByEmail = async (email) => {
  * fetchs all not deleted users
  * @returns
  */
-module.exports.getAll = async () => {
-  // @TODO: add pagination
+module.exports.getAll = async (opts) => {
   try {
-    let users = await db.User.findAll({
+    const page = +opts.page || 1;
+    const limit = +opts.limit || 10;
+    const offset = (page - 1) * limit;
+
+    let { count, rows } = await db.User.findAndCountAll({
       attributes: { exclude: ['password', 'deletedAt'] },
+      limit,
+      offset,
     });
 
-    console.log(users);
-    return [users, null];
+    return [
+      {
+        users: rows,
+        metadata: {
+          total: count,
+          currentPage: page,
+          previousPage: page > 1 ? page - 1 : null,
+          nextPage: count / limit > page ? page + 1 : null,
+        },
+      },
+      null,
+    ];
   } catch (e) {
     return [null, e];
   }
