@@ -1,4 +1,3 @@
-const { validationResult } = require('express-validator');
 const userRepository = require('../repositories/user');
 const roleRepository = require('../repositories/role');
 const asyncWrapper = require('../utils/asyncWrapper');
