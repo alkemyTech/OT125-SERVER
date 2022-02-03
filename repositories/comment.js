@@ -1,8 +1,9 @@
 const db = require('../models/index');
 
 /**
- * fetchs all not deleted users
- * @returns
+ * fetchs all comments
+ * @param {object} opts pagination options
+ * @returns {Promise.<[Object|null,Error|null]>} object {comments,metadata} or Error
  */
 module.exports.getAll = async (opts) => {
   try {
