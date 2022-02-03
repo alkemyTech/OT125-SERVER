@@ -39,7 +39,8 @@ module.exports.getCategories = async ({limit,offset}) => {
 
 
 module.exports.getCategory = async (id) => {
-    const res = await Categories.findOne({ where: { id: id } })
+    const attr = ['id','name','description','image','createdAt','updatedAt']
+    const res = await Categories.findOne({ where: { id: id }, attributes:attr})
         .then(dbResult => {
             if (!dbResult) {
                 const err = new Error()
