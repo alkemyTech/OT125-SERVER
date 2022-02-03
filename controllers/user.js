@@ -6,7 +6,7 @@ const { handleError } = require('../utils/errorHandler');
 const JWT = require('../services/jwt');
 
 /**
- * @route POST /users/register
+ * @route POST /auth/register
  */
 module.exports.register = asyncWrapper(async (req, res, next) => {
   const errors = validationResult(req);
@@ -47,7 +47,7 @@ module.exports.register = asyncWrapper(async (req, res, next) => {
 });
 
 /**
- * @route POST /users/login
+ * @route POST /auth/login
  */
 module.exports.login = asyncWrapper(async (req, res, next) => {
   const errors = validationResult(req);
@@ -77,6 +77,25 @@ module.exports.login = asyncWrapper(async (req, res, next) => {
   res.json({ user, token });
 });
 
+/**
+ * @route GET /users
+ */
+module.exports.getAll = asyncWrapper(async (req, res, next) => {
+  // @TODO: add pagination
+  const [users, err] = await userRepository.getAll();
+  if (err) {
+    errJSON = handleError(err);
+    return res
+      .status(errJSON.statusCode)
+      .json({ errors: [{ msg: errJSON.message }] });
+  }
+
+  res.json({ users });
+});
+
+/**
+ * @route DELETE /users/:id
+ */
 module.exports.delete = asyncWrapper(async (req, res, next) => {
   const { id } = req.params;
 

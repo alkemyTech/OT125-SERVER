@@ -27,7 +27,7 @@ module.exports.getByEmail = async (email) => {
     if (!user) {
       let err = new Error();
       err.name = 'not_found';
-      err.entity = { name: 'User', key: 'email', keyValue: email }
+      err.entity = { name: 'User', key: 'email', keyValue: email };
       return [null, err];
     }
     return [user, null];
@@ -35,16 +35,34 @@ module.exports.getByEmail = async (email) => {
     return [null, e];
   }
 };
-module.exports.deleteUser= async (ID)=>{
-  try{
-    let deleted= await db.User.destroy({
-        where: {
-          id: ID
-        }
-      });
-    return [deleted, null]
+
+/**
+ * fetchs all not deleted users
+ * @returns
+ */
+module.exports.getAll = async () => {
+  // @TODO: add pagination
+  try {
+    let users = await db.User.findAll({
+      attributes: { exclude: ['password', 'deletedAt'] },
+    });
+
+    console.log(users);
+    return [users, null];
+  } catch (e) {
+    return [null, e];
   }
-  catch(e){
-    return[null, e]
+};
+
+module.exports.deleteUser = async (ID) => {
+  try {
+    let deleted = await db.User.destroy({
+      where: {
+        id: ID,
+      },
+    });
+    return [deleted, null];
+  } catch (e) {
+    return [null, e];
   }
-}
+};
