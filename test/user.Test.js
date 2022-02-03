@@ -76,7 +76,7 @@ describe('Register users', async () => {
       expectedBody: {
         errors: [
           {
-            msg: 'unique value duplicated on entity',
+            msg: 'email must be unique',
           },
         ],
       },
@@ -168,7 +168,7 @@ describe('Login users', async () => {
       expectedBody: {
         errors: [
           {
-            msg: 'no user found with email not@registered.com',
+            msg: `User with email not@registered.com doesn't exists.`,
           },
         ],
       },
