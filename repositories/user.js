@@ -42,8 +42,9 @@ module.exports.getByEmail = async (email) => {
  */
 module.exports.getAll = async (opts) => {
   try {
-    const page = +opts.page || 1;
-    const limit = +opts.limit || 10;
+    opts.page = +opts.page <= 0 ? 1 : opts.page;
+    const page = parseInt(opts.page, 10) || 1;
+    const limit = parseInt(opts.limit, 10) || 10;
     const offset = (page - 1) * limit;
 
     let { count, rows } = await db.User.findAndCountAll({
