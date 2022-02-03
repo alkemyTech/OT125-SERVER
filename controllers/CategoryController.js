@@ -31,7 +31,11 @@ module.exports = {
     },
 
     deleteCategory: (req, res) => {
-
+        repo.deleteCategory(req.params.id).then(({ statusCode, response }) => {
+            res.status(statusCode).json(response)
+        }).catch(err => {
+            res.status(500).json({ error: err })
+        })
     }
 
 }

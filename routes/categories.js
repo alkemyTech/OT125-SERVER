@@ -16,7 +16,7 @@ router.post('/', auth, isAdmin, createValidator, controller.createCategory);
 router.patch('/:id', auth, isAdmin, controller.updateCategory);
 
 /* DELETE categories */
-router.delete('/:id', auth, isAdmin, controller.deleteCategory);
+router.delete('/:id', auth, isAdmin, getOneValidator, controller.deleteCategory);
 
 
 module.exports = router;
