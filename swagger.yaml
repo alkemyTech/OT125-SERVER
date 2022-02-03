@@ -87,6 +87,52 @@ paths:
           $ref: '#/components/responses/GenericError'
         '500':
           $ref: '#/components/responses/GenericError'
+  /categories:
+    get:
+      summary: Get a categories paginated list.
+      tags:
+      - Categories
+      description: 'Get a list of categories'
+      parameters:
+        - name: page
+          in: query
+          description: 'Optional pagination'
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions. 
+      security:
+        - BearerToken: []
+    post:
+       summary: Creates a new category
+       tags:
+        - Categories
+       requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryObject'
+        required: true
+       responses:
+        '201':
+          $ref: '#/components/responses/CategoryResponse'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions. 
+       security:
+        - BearerToken: []   
+        
 
 components:
   schemas:
@@ -120,6 +166,41 @@ components:
         deletedAt:
           type: string
           example: null
+    CategoryObject:
+       type: object
+       required:
+        - name
+       properties:
+        name: 
+         type: string
+         example: category 1
+        image: 
+         type: string
+         example: https://i.imgur.com/example-category.jpg
+        description:
+         type: string
+         example: Sample description of category
+    CategoryResponseObject:
+     type: object
+     properties:
+       id: 
+        type: integer
+        example: 1
+       name: 
+        type: string
+        example: category 1
+       image: 
+        type: string
+        example: https://i.imgur.com/example-category.jpg
+       description:
+        type: string
+        example: Sample description of category
+       createdAt: 
+        type: string
+        example: "2022-02-03T04:09:51.592Z"
+       updatedAt: 
+        type: string
+        example: "2022-02-03T04:09:51.592Z" 
   responses:
     JWT:
       description: token
@@ -197,6 +278,17 @@ components:
                   properties:
                     msg:
                       type: string
+    CategoryResponse:
+      description: A json data response for category
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: 
+                $ref: '#/components/schemas/CategoryResponseObject'
+
+
   securitySchemes:
     BearerAuth:
       type: http
@@ -206,3 +298,5 @@ components:
 
 tags:
   - name: authorization
+  - name: Categories
+    description: Categories CRUD

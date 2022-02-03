@@ -29,13 +29,11 @@ module.exports.createCategory = async (category) => {
 }
 
 
-module.exports.getCategories = async () => {
+module.exports.getCategories = async ({limit,offset}) => {
 
-    /* Space for pagination in a few days */
-
-    const res = await Categories.findAll({ attributes: ['id', 'name'] })
-        .then(dbResult => { return responseParser({ statusCode: 200, object: dbResult }) })
-
+    const attr = ['id','name']
+    const res = await Categories.findAndCountAll({ attributes: attr,limit,offset })
+        .then(dbResult => dbResult)
     return res;
 }
 
