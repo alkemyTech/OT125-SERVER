@@ -9,11 +9,6 @@ const JWT = require('../services/jwt');
  * @route POST /auth/register
  */
 module.exports.register = asyncWrapper(async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
   const body = { ...req.body };
 
   /*  //If roles are standarized, then it should be possible to assing a roleId without having to query the DB
@@ -50,11 +45,6 @@ module.exports.register = asyncWrapper(async (req, res, next) => {
  * @route POST /auth/login
  */
 module.exports.login = asyncWrapper(async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
   const { email, password } = req.body;
 
   const [user, err] = await userRepository.getByEmail(email);
