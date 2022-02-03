@@ -3,6 +3,10 @@ var router = express.Router();
 
 const commentController = require('../controllers/comment');
 
-router.get('/', commentController.getAll);
+const isAdmin = require('../middleware/isAdmin');
+const auth = require('../middleware/authenticate');
+
+/* GET users listing. */
+router.get('/', auth, isAdmin, commentController.getAll);
 
 module.exports = router;
