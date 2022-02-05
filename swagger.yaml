@@ -4,7 +4,7 @@ info:
   version: 0.1.0
 
 servers:
-  - url: http://localhost:8000
+  - url: http://localhost:3000
 
 security:
   - BearerAuth: []
@@ -112,7 +112,7 @@ paths:
         '403':
           description: Insufficient permissions. 
       security:
-        - BearerToken: []
+        - BearerAuth: []
     post:
        summary: Creates a new category
        tags:
@@ -135,7 +135,7 @@ paths:
         '409':
           description: Category name already exists on database.
        security:
-        - BearerToken: []   
+        - BearerAuth: []   
   /categories/{id}:
     get:
       summary: Get a specific category.
@@ -160,7 +160,7 @@ paths:
         '404':
           $ref: '#/components/responses/EntityNotFound'
       security:
-        - BearerToken: []
+        - BearerAuth: []
     delete: 
       summary: Delete a specific category
       parameters:
@@ -182,6 +182,8 @@ paths:
           description: Insufficient permissions.
        '404':
           $ref: '#/components/responses/EntityNotFound'
+      security:
+        - BearerAuth: []
 
        
 
