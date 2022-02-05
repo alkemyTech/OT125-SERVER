@@ -11,7 +11,10 @@ module.exports = {
       welcomeText: 'Organization welcome text example',
       aboutUsText: 'Another text example',
       createdAt: new Date,
-      updatedAt: new Date
+      updatedAt: new Date,
+      url_facebook: 'facebook/ong.com',
+      url_linkedin: 'linkedin/ong.com',
+      url_instagram: 'instagram/ong'
     }], {});
   },
 
