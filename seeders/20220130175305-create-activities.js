@@ -29,6 +29,22 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          name: 'Actividad Test4',
+          content: 'Demo3',
+          image:
+            'https://live.staticflickr.com/65535/49737580966_d7eb77f786_b.jpg',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          name: 'Actividad Test5',
+          content: 'Demo3',
+          image:
+            'https://live.staticflickr.com/65535/49737580966_d7eb77f786_b.jpg',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );
