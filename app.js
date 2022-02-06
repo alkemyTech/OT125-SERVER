@@ -34,7 +34,7 @@ app.use('/auth', authRouter);
 app.use('/categories', categoryRouter);
 app.use('/news', newsRouter);
 app.use('/testimonials', testimonialsRouter);
-app.use('/organizations', orgRouter);
+app.use('/organization', orgRouter);
 app.use('/activities', ActivitiesRouter);
 
 // catch 404 and forward to error handler
