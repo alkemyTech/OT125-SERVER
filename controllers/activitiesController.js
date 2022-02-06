@@ -1,14 +1,9 @@
 const repository = require('../repositories/activities');
-const { validationResult } = require('express-validator');
 const asyncWrapper = require('../utils/asyncWrapper');
 
 
 // Create
 exports.create = asyncWrapper(async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
   const body = { name: req.body.name, content: req.body.content, image: req.body.image }
 
   await repository.create(body, cb => {
@@ -17,7 +12,7 @@ exports.create = asyncWrapper(async (req, res, next) => {
         .status(errJSON.statusCode)
         .json({ errors: [{ msg: errJSON.errMessage }] });
     } else {
-      res.json(cb)
+      res.status(201).json(cb)
     }
   })
 
@@ -35,11 +30,6 @@ exports.findOne = (req, res) => {
 
 // Update
 exports.update = asyncWrapper(async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
   const _id = req.params.id;
   const body = { name: req.body.name, content: req.body.content, image: req.body.image }
   await repository.setOne(_id, body, cb => {
