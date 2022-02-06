@@ -58,7 +58,7 @@ module.exports.getAll = async (opts) => {
       {
         users: rows,
         metadata: {
-          total: count,
+          lastPage: Math.ceil(count / limit),
           currentPage: page,
           previousPage: page > 1 ? page - 1 : null,
           nextPage: count / limit > page ? page + 1 : null,
