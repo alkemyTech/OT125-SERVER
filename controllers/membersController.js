@@ -1,5 +1,4 @@
 const repository = require('../repositories/members');
-const { validationResult } = require('express-validator');
 const asyncWrapper = require('../utils/asyncWrapper');
 
 
@@ -9,10 +8,10 @@ exports.create = asyncWrapper(async (req, res, next) => {
   const body = { name: req.body.name, image: req.body.image }
 
   await repository.create(body, cb => {
-    if (cb.errMessage) {
+    if (cb.message) {
       res
         .status(errJSON.statusCode)
-        .json({ errors: [{ msg: errJSON.errMessage }] });
+        .json({ errors: [{ msg: errJSON.message }] });
     } else {
       res.json(cb)
     }

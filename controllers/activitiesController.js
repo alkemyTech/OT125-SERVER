@@ -7,10 +7,10 @@ exports.create = asyncWrapper(async (req, res, next) => {
   const body = { name: req.body.name, content: req.body.content, image: req.body.image }
 
   await repository.create(body, cb => {
-    if (cb.errMessage) {
+    if (cb.message) {
       res
         .status(errJSON.statusCode)
-        .json({ errors: [{ msg: errJSON.errMessage }] });
+        .json({ errors: [{ msg: errJSON.message }] });
     } else {
       res.status(201).json(cb)
     }
@@ -33,10 +33,10 @@ exports.update = asyncWrapper(async (req, res, next) => {
   const _id = req.params.id;
   const body = { name: req.body.name, content: req.body.content, image: req.body.image }
   await repository.setOne(_id, body, cb => {
-    if (cb.errMessage) {
+    if (cb.message) {
       res
         .status(errJSON.statusCode)
-        .json({ errors: [{ msg: errJSON.errMessage }] });
+        .json({ errors: [{ msg: errJSON.message }] });
     } else {
       res.json(cb)
     }
