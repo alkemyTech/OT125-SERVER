@@ -59,7 +59,7 @@ module.exports.getCategory = async (id) => {
 
 
 module.exports.updateCategory = async ({category, id}) => {
-    try{let values = {}
+    let values = {}
     Object.keys(category).forEach(field => {
         values[field] = category[field]
     })
@@ -80,5 +80,5 @@ module.exports.updateCategory = async ({category, id}) => {
             })
         }
         )
-    return res}catch(e){console.log(e)}
+    return res;
 }
