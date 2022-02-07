@@ -1,42 +1,42 @@
 const repository = require('../repositories/members');
 const asyncWrapper = require('../utils/asyncWrapper');
 
+let membersControllers={
+  
+      create:asyncWrapper(async (req, res, next) => {
+        const body = { name: req.body.name, image: req.body.image }
 
-// Create
-exports.create = asyncWrapper(async (req, res, next) => {
+        await repository.create(body, cb => {
+          if (cb.message) {
+            res
+            .status(errJSON.statusCode)
+            .json({ errors: [{ msg: errJSON.message }] });
+          } else {
+            res.json(cb)
+          }
+        })
 
-  const body = { name: req.body.name, image: req.body.image }
+      });
+  
+      //Get all activities
+      findAll:asyncWrapper(async (req, res) => {
+        let members = await repository.getAll()
+        res.json(members)
 
-  await repository.create(body, cb => {
-    if (cb.message) {
-      res
-        .status(errJSON.statusCode)
-        .json({ errors: [{ msg: errJSON.message }] });
-    } else {
-      res.json(cb)
-    }
-  })
-
-});
-
-//Get all activities
-exports.findAll = asyncWrapper(async (req, res) => {
-  let members = await repository.getAll()
-  res.json(members)
-
-});
-
-// Find one by ID
-exports.findOne = (req, res) => {
-
+      });
+  
+      edit:function(req,res,next){
+        res.send('Members get  editions');
+      },
+  
+      update:function(req,res,next){
+        res.send('Members update');
+      },
+  
+      destroy:function(req,res,next){
+        res.send('Members deleted');
+      },
+ 
 };
 
-// Update
-exports.update = (req, res, next) => {
-
-};
-
-// Delete
-exports.delete = (req, res) => {
-
-};
+module.exports = membersControllers;
