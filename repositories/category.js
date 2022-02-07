@@ -73,7 +73,7 @@ module.exports.updateCategory = async ({category, id}) => {
                 return responseParser({error:errP(err)})
             }
             return dbResult.update(values)
-            .then(result => responseParser({ statusCode: 201, object: result }))
+            .then(result => responseParser({ statusCode: 200, object: result }))
             .catch(err => {
               console.log(err)
               return responseParser({error:errP(err)})
