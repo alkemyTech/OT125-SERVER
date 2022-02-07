@@ -20,8 +20,9 @@ let membersControllers={
   
       //Get all activities
       findAll:asyncWrapper(async (req, res) => {
-        let members = await repository.getAll()
-        res.json(members)
+        repository.getAll()
+          .then(result =>res.json(result))
+          .catch(err=>res.status(500).json(err));
 
       });
   
