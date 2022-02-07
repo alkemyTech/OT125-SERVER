@@ -1,8 +1,8 @@
 const repo = require('../repositories/role');
-module.exports = (req, res, next) => {
+module.exports = (req, res, next) => {  
   //Case 1: without DB query
   /* if(req.currentUser.roleId === 1) next()
-    else res.status(403).json({error:`Insufficient permissions.`}) */
+  else res.status(403).json({error:`Insufficient permissions.`}) */
 
   //Case 2: with DB query
   repo

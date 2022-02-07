@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+var methodOverride = require('method-override');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -15,6 +16,8 @@ const testimonialsRouter = require('./routes/testimonials');
 const orgRouter = require('./routes/organization');
 const ActivitiesRouter = require('./routes/activities');
 const commentRouter = require('./routes/comment');
+const membersRouter = require('./routes/members');
+
 
 const app = express();
 app.use(cors());
@@ -28,6 +31,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(methodOverride('_method'));
+
 
 app.use('/roles', rolesRouter);
 app.use('/users', usersRouter);
@@ -38,6 +43,7 @@ app.use('/testimonials', testimonialsRouter);
 app.use('/organizations', orgRouter);
 app.use('/activities', ActivitiesRouter);
 app.use('/comments', commentRouter);
+app.use('/members',membersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
