@@ -1,11 +1,9 @@
 var express = require('express');
-const slidesControllers= require('../controllers/slidesController')
+const slidesController= require('../controllers/slidesController')
 var router = express.Router();
 
 
-router.get('/',  (req, res) => {
-    res.send('slides');
-});
+router.get('/', slidesController.create);
 
 
 module.exports = router;
