@@ -18,7 +18,7 @@ describe("ORGTESTS - Organization without Auth integration tests", () => {
 
 
     it(' POST organization/public without auth: should get 401 ', (done) => {
-        agent.post('organization/public').end((err, res) => {
+        agent.post('/organization/public').end((err, res) => {
             expect(res).to.have.status(401)
             done();
         })
