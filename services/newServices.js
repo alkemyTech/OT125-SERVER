@@ -18,7 +18,14 @@ module.exports = {
         return allNews
     },
     update : async (id, data) => {
-        
+        let newAtUpdate = await newsRepository.getOne(id)
+        if(!newAtUpdate){
+            const error = new Error(`Not found id: ${id}`)
+            error.status = 404
+            throw error
+        }
+        await newsRepository.update(id, data)
+        return await newsRepository.getOne(id)
     },
     remove : async (id) => {
         const newsAtRemove = await newsRepository.remove(id)

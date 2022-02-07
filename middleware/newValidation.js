@@ -36,16 +36,17 @@ const categoryId = body('categoryId')
     throw new Error('Must be greater than 0')
   })
 
-  const validation = (req, res, next) => {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() })
-    }
-    next()
+const validation = (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() })
   }
+  next()
+}
 
 module.exports = {
   validatorCreate: [name, content, image, categoryId, validation],
   validatorRemove: [idParam, validation],
   validatorGetOne: [idParam, validation],
+  validatorUpdate: [idParam, name, content, image, categoryId, validation]
 }
