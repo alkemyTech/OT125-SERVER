@@ -1,28 +1,31 @@
-const db = require('../models/testimonial');
+const repo = require('../repositories/testimonials');
 
-let testimonialsControllers={
 
-    create:function(req, res, next) {
-        res.send('Testimonials-creation');
-      },
+let testimonialsController = {
+  create: async function (req, res) {
+    try {
+      const data = await repo.createTestimonial(req.body);
+      res.json(data.reponse).status(data.statusCode)
+    } catch (error) {
+      res.json({ mssg: error }).status(500)
+    }
+  },
 
-    store:function(req,res,next){
-      res.send('Testimonials -reading');
-    },
+  store: function (req, res, next) {
+    res.send('Testimonials -reading');
+  },
 
-    edit:function(req,res,next){
-      res.send('Testimonials get  editions');
-    },
+  edit: function (req, res, next) {
+    res.send('Testimonials get  editions');
+  },
 
-    update:function(req,res,next){
-      res.send('Testimonials update');
-    },
+  update: function (req, res, next) {
+    res.send('Testimonials update');
+  },
 
-    destroy:function(req,res,next){
-      res.send('Testimonials deleted');
-    },
-
- 
+  destroy: function (req, res, next) {
+    res.send('Testimonials deleted');
+  },
 };
 
-module.exports = testimonialsControllers;
+module.exports = testimonialsController;
