@@ -1,8 +1,8 @@
-const { members } = require('../models/index');
+const { Member:members } = require('../models/index');
 const { handleError } = require('../utils/errorHandler');
 
 exports.create = async(member,cb)=>{
-  members.findOrCreate({
+  Members.findOrCreate({
     where: {
       name: member.name,
 
@@ -31,7 +31,7 @@ exports.create = async(member,cb)=>{
 }
 
 exports.getAll = async()=>{
-    return await members.findAll();
+    return members.findAll();
 }
 
 exports.setOne = async()=>{
