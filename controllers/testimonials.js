@@ -1,4 +1,8 @@
 const db = require('../models/testimonial');
+const testimonialRepository = require('../repositories/testimonial');
+
+//const asyncWrapper = require('../utils/asyncWrapper');
+const { handleError } = require('../utils/errorHandler');
 
 let testimonialsControllers={
 
@@ -19,9 +23,15 @@ let testimonialsControllers={
     },
 
     destroy:function(req,res,next){
-      res.send('Testimonials deleted');
-    },
+      
+      const { id } = req.params;
 
+      testimonialRepository.deleteTestimonial(id).then(({ statusCode, response }) => {
+        res.status(statusCode).json(response);
+      }).catch(err => {
+        res.status(500).json({ error: err })
+      });  
+    }
  
 };
 

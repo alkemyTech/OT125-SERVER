@@ -12,7 +12,7 @@ router.get('/edit/:id',isAdminMIddleware,testimonialsControllers.edit);
 
 router.put('/edit/:id', isAdminMIddleware,testimonialsControllers.update);
 
-router.delete('/destroy/:id',isAdminMIddleware , testimonialsControllers.destroy);
+router.delete('/destroy/:id' , testimonialsControllers.destroy);
 
 
 
