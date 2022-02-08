@@ -37,14 +37,15 @@ module.exports.getByEmail = async (email) => {
 };
 module.exports.deleteUser= async (ID)=>{
   try{
-    let deleted= await db.User.destroy({
+      await db.User.destroy({
         where: {
           id: ID
         }
       });
-    return [deleted, null]
+    return ['deleted', null]
   }
   catch(e){
+    console.log('en el error del repostitory');
     return[null, e]
   }
 }
