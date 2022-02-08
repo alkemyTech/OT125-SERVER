@@ -6,11 +6,11 @@ const { handleError } = require('../utils/errorHandler');
 
 let testimonialsControllers={
 
-    create:function(req, res, next) {
+    findAll:function(req, res, next) {
         res.send('Testimonials-creation');
       },
 
-    store:function(req,res,next){
+    create:function(req,res,next){
       res.send('Testimonials -reading');
     },
 
