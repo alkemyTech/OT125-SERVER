@@ -5,7 +5,8 @@ const userController = require('../controllers/user');
 const isAdmin = require('../middleware/isAdmin');
 const auth = require('../middleware/authenticate');
 
-router.get('/', auth, isAdmin, userController.getAll);
+router.use(auth,isAdmin)
+router.get('/', userController.getAll);
 
 router.delete('/:id', userController.delete);
 
