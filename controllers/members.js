@@ -21,7 +21,7 @@ let membersControllers = {
     repository
       .getAll()
       .then((result) => res.json(result))
-      .catch((err) => res.status(500).json(err));
+      .catch((err) => console.log(err));
   }),
 
   edit: function (req, res, next) {
