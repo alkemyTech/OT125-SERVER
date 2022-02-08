@@ -27,7 +27,13 @@ module.exports = {
     },
 
     updateCategory: (req, res) => {
-
+      repo.updateCategory({
+          category: req.body, id: req.params.id
+      }).then(({ statusCode, response }) => {
+        res.status(statusCode).json(response)
+      }).catch(err => {
+          res.status(500).json({ error: err })
+      })
     },
 
     deleteCategory: (req, res) => {

@@ -14,6 +14,20 @@ module.exports = {
         param('id').isInt().withMessage('Invalid id value. Only integers.')
         .notEmpty().withMessage('Id is required param.'),
         errHandler
+    ],
+    updateValidator:
+    [
+        body('name').custom(val => {
+            if(val === undefined) return true
+            if(val.trim() === "") throw new Error('empty description not allowed')
+            return true
+        }),
+        body('description').custom(val => {
+            if(val === undefined) return true
+            if(val.trim() === "") throw new Error('empty description not allowed')
+            return true
+        }),
+        errHandler
     ]
     
 }
