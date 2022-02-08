@@ -3,7 +3,7 @@ const router = express.Router();
 const controller = require('../controllers/orgController');
 const validation = require('../middleware/orgValidation');
 const isAdmin = require('../middleware/isAdmin');
-const auth = require('../middleware/authenticate')
+const auth = require('../middleware/authenticate');
 
 
 router.get('/public/', controller.orgGetOne);
