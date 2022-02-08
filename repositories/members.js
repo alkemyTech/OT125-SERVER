@@ -1,22 +1,25 @@
-const { members } = require('../models/index');
+const { Member } = require('../models/index');
 const { handleError } = require('../utils/errorHandler');
 
 exports.create = async(member,cb)=>{
-  members.findOrCreate({
+  Member.findOrCreate({
     where: {
       name: member.name,
 
     },
     defaults: {
       name: member.name,
-      content: member.content,
-      image: member.image
+      facebookUrl: member.facebookUrl,
+      instagramUrl: member.instagramUrl,
+      linkedinUrl: member.linkedinUrl,
+      image: member.image,
+      description: member.description
     }
   })
     .then(result => {
       if (!result[1]) {
         let err = new Error(`Activity already exists`);
-        err.name = 'SequelizeUniqueConstraintError';
+        err.name = 'duplicated_entry';
         errJSON = handleError(err)
         return cb(errJSON)
 
@@ -31,7 +34,9 @@ exports.create = async(member,cb)=>{
 }
 
 exports.getAll = async()=>{
-    return await members.findAll();
+  const res = await Member.findAndCountAll()
+  .then(dbResult => dbResult)
+  return res;
 }
 
 exports.setOne = async()=>{

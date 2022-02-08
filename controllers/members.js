@@ -3,7 +3,14 @@ const asyncWrapper = require('../utils/asyncWrapper');
 
 let membersControllers = {
   create: asyncWrapper(async (req, res, next) => {
-    const body = { name: req.body.name, image: req.body.image };
+    const body = { 
+      name: req.body.name,
+      facebookUrl: req.body.facebookUrl,
+      instagramUrl: req.body.instagramUrl,
+      linkedinUrl: req.body.linkedinUrl,
+      image: req.body.image,
+      description: req.body.description
+    };
 
     await repository.create(body, (cb) => {
       if (cb.message) {
@@ -20,7 +27,7 @@ let membersControllers = {
   findAll: asyncWrapper(async (req, res) => {
     repository
       .getAll()
-      .then((result) => res.json(result))
+      .then(result => res.json(result))
       .catch((err) => res.status(500).json(err));
   }),
 
