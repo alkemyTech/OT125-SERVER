@@ -1,3 +1,4 @@
+const db = require('../models/index')
 const { Categories } = require('../models/index')
 const { handleError: errP } = require('../utils/errorHandler')
 const responseParser = require('../utils/responseFormatter')
@@ -53,5 +54,31 @@ module.exports.getCategory = async (id) => {
         }
         )
 
+    return res;
+}
+
+
+module.exports.updateCategory = async ({category, id}) => {
+    let values = {}
+    Object.keys(category).forEach(field => {
+        values[field] = category[field]
+    })
+
+    const res = await Categories.findOne({ where: { id: id } })
+        .then(dbResult => {
+            if (!dbResult) {
+                const err = new Error()
+                err.name = 'not_found';
+                err.entity = { name: 'Category', key: 'id', keyValue:id }
+                return responseParser({error:errP(err)})
+            }
+            return dbResult.update(values)
+            .then(result => responseParser({ statusCode: 200, object: result }))
+            .catch(err => {
+              console.log(err)
+              return responseParser({error:errP(err)})
+            })
+        }
+        )
     return res;
 }
