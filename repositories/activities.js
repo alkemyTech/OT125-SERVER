@@ -16,7 +16,8 @@ exports.create = async (activity, cb) => {
     .then(result => {
       if (!result[1]) {
         let err = new Error(`Activity already exists`);
-        err.name = 'SequelizeUniqueConstraintError';
+        err.name = 'duplicated_entry';
+        err.entity=result[0];
         errJSON = handleError(err)
         return cb(errJSON)
 
@@ -30,9 +31,6 @@ exports.create = async (activity, cb) => {
 
 }
 
-exports.getbyId = async (_id, cb) => {
-  activities.findByPk(_id).then(activityFound => cb(activityFound)).catch(err => cb(err))
-}
 
 exports.setOne = async (_id, body, cb) => {
   activities.update(
@@ -49,6 +47,7 @@ exports.setOne = async (_id, body, cb) => {
       if (result == 0) {
         let err = new Error(`Activity not found`);
         err.name = 'not_found';
+        err.entity=body;
         errJSON = handleError(err)
         return cb(errJSON)
       }

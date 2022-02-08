@@ -1,11 +1,11 @@
 const { Organization } = require('../models/index');
 const responseParser = require('../utils/responseFormatter');
 
-module.exports.getOneOrg = async (orgId) => {
+module.exports.getOneOrg = async () => {
     try {
         const orgFound = await Organization.findOne({
             where: {
-                id: orgId
+                id: 1
             },
             attributes: [
                 'name',
@@ -24,22 +24,22 @@ module.exports.getOneOrg = async (orgId) => {
         }
 
     } catch (error) {
-        console.error(error).status(500);
+        return { statusCode: 500, response: { error: error } };
     }
 };
 
-module.exports.updateOrg = async (id, body) => {
+module.exports.updateOrg = async (body) => {
     try {
         const orgFound = await Organization.findOne({
             where: {
-                id: id
+                id: 1
             }
         });
 
         if (!orgFound) {
             return responseParser({ statusCode: 404, object: { message: 'not_found' } })
         } else {
-            const update = await orgFound.update({
+            const organizationUpdate = await orgFound.update({
                 name: body.name,
                 image: body.image,
                 address: body.address,
@@ -49,11 +49,11 @@ module.exports.updateOrg = async (id, body) => {
                 aboutUsText: body.aboutUsText
 
             });
-            await update.save();
-            return responseParser({ statusCode: 200, object: update });
+            await organizationUpdate.save();
+            return responseParser({ statusCode: 200, object: organizationUpdate });
         }
 
     } catch (error) {
-        console.error(error).status(500);
+        return { statusCode: 500, response: { error: error } };;
     }
 }

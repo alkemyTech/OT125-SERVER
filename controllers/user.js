@@ -1,4 +1,3 @@
-const { validationResult } = require('express-validator');
 const userRepository = require('../repositories/user');
 const roleRepository = require('../repositories/role');
 const asyncWrapper = require('../utils/asyncWrapper');
@@ -6,14 +5,9 @@ const { handleError } = require('../utils/errorHandler');
 const JWT = require('../services/jwt');
 
 /**
- * @route POST /users/register
+ * @route POST /auth/register
  */
 module.exports.register = asyncWrapper(async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
   const body = { ...req.body };
 
   /*  //If roles are standarized, then it should be possible to assing a roleId without having to query the DB
@@ -47,14 +41,9 @@ module.exports.register = asyncWrapper(async (req, res, next) => {
 });
 
 /**
- * @route POST /users/login
+ * @route POST /auth/login
  */
 module.exports.login = asyncWrapper(async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
   const { email, password } = req.body;
 
   const [user, err] = await userRepository.getByEmail(email);
@@ -77,6 +66,24 @@ module.exports.login = asyncWrapper(async (req, res, next) => {
   res.json({ user, token });
 });
 
+/**
+ * @route GET /users
+ */
+module.exports.getAll = asyncWrapper(async (req, res, next) => {
+  const [result, err] = await userRepository.getAll(req.query);
+  if (err) {
+    errJSON = handleError(err);
+    return res
+      .status(errJSON.statusCode)
+      .json({ errors: [{ msg: errJSON.message }] });
+  }
+
+  res.json(result);
+});
+
+/**
+ * @route DELETE /users/:id
+ */
 module.exports.delete = asyncWrapper(async (req, res, next) => {
   const { id } = req.params;
 

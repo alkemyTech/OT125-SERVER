@@ -3,7 +3,7 @@ const JWT = require('../services/jwt');
 /**
  * validates that request contains a valid jwt token on a Bearer Authorization header
  */
-module.exports.authenticate = (req, res, next) => {
+module.exports = (req, res, next) => {
   const authHeader = req.header('Authorization');
   if (!authHeader) {
     res.statusCode = 401;

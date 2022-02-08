@@ -4,7 +4,7 @@ info:
   version: 0.1.0
 
 servers:
-  - url: http://localhost:8000
+  - url: http://localhost:3000
 
 security:
   - BearerAuth: []
@@ -87,6 +87,151 @@ paths:
           $ref: '#/components/responses/GenericError'
         '500':
           $ref: '#/components/responses/GenericError'
+  /categories:
+    get:
+      summary: Get a categories paginated list.
+      tags:
+      - Categories
+      description: 'Get a list of categories'
+      parameters:
+        - name: page
+          in: query
+          description: 'Optional pagination'
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+            $ref: '#/components/responses/CategoryPaginated'
+        '400':
+            $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions. 
+      security:
+        - BearerAuth: []
+    post:
+       summary: Creates a new category
+       tags:
+        - Categories
+       requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryObject'
+        required: true
+       responses:
+        '201':
+          $ref: '#/components/responses/CategoryResponse'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions. 
+        '409':
+          description: Category name already exists on database.
+       security:
+        - BearerAuth: []   
+  /categories/{id}:
+    get:
+      summary: Get a specific category.
+      parameters:
+         - in: path
+           name: id
+           schema:
+            type: integer
+           required: true
+      tags:
+      - Categories
+      description: 'Get a category by id'
+      responses:
+        '200':
+            $ref: '#/components/responses/CategoryResponse'
+        '400':
+            $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          $ref: '#/components/responses/EntityNotFound'
+      security:
+        - BearerAuth: []
+    delete: 
+      summary: Delete a specific category
+      parameters:
+         - in: path
+           name: id
+           schema:
+            type: integer
+           required: true
+      tags:
+      - Categories
+      responses:
+       '202':
+         $ref: '#/components/responses/CategoryDeleted'
+       '400':
+          $ref: '#/components/responses/ValidationErrors'
+       '401':
+          description: Token missing in header.
+       '403':
+          description: Insufficient permissions.
+       '404':
+          $ref: '#/components/responses/EntityNotFound'
+      security:
+        - BearerAuth: []
+
+       
+
+  /users:
+    get:
+      summary: Returns a list of users
+      tags:
+        - users
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+          description: page number; default 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+          description: qty of user per page; default 10
+      responses:
+        '200':
+          description: list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  metadata:
+                    type: object
+                    properties:
+                      lastPage:
+                        type: number
+                        example: 3
+                      currentPage:
+                        type: number
+                        example: 1
+                      previousPage:
+                        type: number
+                        example: null
+                      nextPage:
+                        type: number
+                        example: 2
 
 components:
   schemas:
@@ -120,6 +265,70 @@ components:
         deletedAt:
           type: string
           example: null
+    CategoryObject:
+       type: object
+       required:
+        - name
+       properties:
+        name: 
+         type: string
+         example: category 1
+        image: 
+         type: string
+         example: https://i.imgur.com/example-category.jpg
+        description:
+         type: string
+         example: Sample description of category
+    Category:
+     type: object
+     properties:
+       id: 
+        type: integer
+        example: 1
+       name: 
+        type: string
+        example: category 1
+       image: 
+        type: string
+        example: https://i.imgur.com/example-category.jpg
+       description:
+        type: string
+        example: Sample description of category
+       createdAt: 
+        type: string
+        example: "2022-02-03T04:09:51.592Z"
+       updatedAt: 
+        type: string
+        example: "2022-02-03T04:09:51.592Z" 
+    CategorySimplifiedDTO:
+      type: object
+      properties:
+       id:
+         type: integer
+         example: 1
+       name:
+         type: string
+         example: Category 1
+    CategoryPaginatedDTO:
+     type: object
+     properties:
+      categories:
+       type: array
+       items:
+        $ref: "#/components/schemas/CategorySimplifiedDTO"
+      metadata:
+       type: object
+       properties:
+         finalPage:
+             type: integer
+             example: 10
+         nextPage:
+             type: integer
+             example: 3
+         previousPage:
+             type: integer 
+             example: 1
+     
   responses:
     JWT:
       description: token
@@ -197,6 +406,46 @@ components:
                   properties:
                     msg:
                       type: string
+    CategoryResponse:
+      description: A json data response for category
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: 
+                $ref: '#/components/schemas/Category'
+    CategoryPaginated:
+     description: response of paginated categories with only id and name.
+     content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CategoryPaginatedDTO'
+    CategoryDeleted:
+      description: Success deleted message
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: 
+                type: object
+                properties:
+                  deleteStatus:
+                     type: string
+                     example: Category with id 17 deleted successfully.
+    EntityNotFound:
+      description: Error message when required entity doesn't exists in database.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error: 
+                type: string
+                example: Entity with id X doesn't exists.
+
+
   securitySchemes:
     BearerAuth:
       type: http
@@ -206,3 +455,5 @@ components:
 
 tags:
   - name: authorization
+  - name: Categories
+    description: Categories CRUD
