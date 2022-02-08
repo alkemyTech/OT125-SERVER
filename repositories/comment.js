@@ -13,8 +13,13 @@ module.exports.getAll = async (opts) => {
     const offset = (page - 1) * limit;
 
     let { count, rows } = await db.Comment.findAndCountAll({
-      attributes: { include: ['body'] },
+      attributes: { exclude: ['postId', 'userId'] },
       order: [['createdAt', 'DESC']],
+      include: [
+        { association: 'news', attributes: ['id', 'name'] },
+        { association: 'user', attributes: ['id', 'firstName', 'image'] },
+      ],
+
       limit,
       offset,
     });
@@ -23,7 +28,7 @@ module.exports.getAll = async (opts) => {
       {
         comments: rows,
         metadata: {
-          total: count,
+          lastPage: Math.ceil(count / limit),
           currentPage: page,
           previousPage: page > 1 ? page - 1 : null,
           nextPage: count / limit > page ? page + 1 : null,
