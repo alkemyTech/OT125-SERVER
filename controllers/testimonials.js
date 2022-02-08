@@ -1,7 +1,7 @@
 const db = require('../models/testimonial');
 const testimonialRepository = require('../repositories/testimonial');
 
-//const asyncWrapper = require('../utils/asyncWrapper');
+
 const { handleError } = require('../utils/errorHandler');
 
 let testimonialsControllers={
@@ -18,12 +18,16 @@ let testimonialsControllers={
       res.send('Testimonials get  editions');
     },
 
-    update:function(req,res,next){
-      res.send('Testimonials update');
+    update: async function(req,res,next){
+      const data = await testimonialRepository.updateTestimonial(req.params.id,req.body);
+      res.json(data);
+      
     },
 
+   
+
     destroy:function(req,res,next){
-      
+
       const { id } = req.params;
 
       testimonialRepository.deleteTestimonial(id).then(({ statusCode, response }) => {

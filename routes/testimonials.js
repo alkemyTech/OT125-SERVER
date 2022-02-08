@@ -10,9 +10,9 @@ router.post('/create',isAdminMIddleware,testimonialsControllers.store);
 
 router.get('/edit/:id',isAdminMIddleware,testimonialsControllers.edit);
 
-router.put('/edit/:id', isAdminMIddleware,testimonialsControllers.update);
+router.put('/edit/:id',isAdminMIddleware,testimonialsControllers.update);
 
-router.delete('/destroy/:id' , testimonialsControllers.destroy);
+router.delete('/destroy/:id',isAdminMIddleware, testimonialsControllers.destroy);
 
 
 
