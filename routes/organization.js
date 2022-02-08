@@ -1,18 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/orgController');
-const isAdminMIddleware=require('../Middleware/isAdmin');
-
+const repo = require('../repositories/organization');
+const validation = require('../middleware/orgValidation');
+const isAdmin = require('../middleware/isAdmin');
+const auth = require('../middleware/authenticate');
 
 router.get('/', controller.orgGet);
 
-router.get('/:id',isAdminMIddleware, controller.orgGetOne);
+router.get('/public/:id', controller.orgGetOne, repo.getOneOrg);
 
-router.post('/',isAdminMIddleware ,controller.orgUpdate);
+router.post(
+  '/public/:id',
+  validation.updateValidation,
+  controller.orgUpdate,
+  repo.updateOrg
+);
 
-router.delete('/:id',isAdminMIddleware ,controller.orgDelete);
+router.use(auth, isAdmin);
 
-router.patch('/:id', isAdminMIddleware, controller.orgUpdate);
+router.delete('/:id', controller.orgDelete);
 
+router.patch('/:id', controller.orgUpdate);
 
 module.exports = router;

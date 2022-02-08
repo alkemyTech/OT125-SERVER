@@ -2,14 +2,19 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('Testimonials', [{
-      name: 'Ruth',
-      image: '',
-      content: 'without comment',
-      //createdAt: new Date,
-     // updatedAt: new Date,
-     //deteletAt:
-    }], {});
+    await queryInterface.bulkInsert(
+      'Testimonials',
+      [
+        {
+          name: 'Ruth',
+          image: '',
+          content: 'without comment',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ],
+      {}
+    );
   },
 
   down: async (queryInterface, Sequelize) => {
@@ -19,5 +24,5 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-  }
+  },
 };

@@ -1,27 +1,47 @@
-const db = require('../models/member');
+const repository = require('../repositories/members');
+const asyncWrapper = require('../utils/asyncWrapper');
 
-let membersControllers={
+let membersControllers = {
+  create: asyncWrapper(async (req, res, next) => {
+    const body = { 
+      name: req.body.name,
+      facebookUrl: req.body.facebookUrl,
+      instagramUrl: req.body.instagramUrl,
+      linkedinUrl: req.body.linkedinUrl,
+      image: req.body.image,
+      description: req.body.description
+    };
 
-    create:function(req, res, next) {
-        res.send('Members-creation')
-      },
-    
-      store:function(req,res,next){
-        res.send('Members -reading');
-      },
-  
-      edit:function(req,res,next){
-        res.send('Members get  editions');
-      },
-  
-      update:function(req,res,next){
-        res.send('Members update');
-      },
-  
-      destroy:function(req,res,next){
-        res.send('Members deleted');
-      },
- 
+    await repository.create(body, (cb) => {
+      if (cb.message) {
+        res
+          .status(errJSON.statusCode)
+          .json({ errors: [{ msg: errJSON.message }] });
+      } else {
+        res.json(cb);
+      }
+    });
+  }),
+
+  //Get all activities
+  findAll: asyncWrapper(async (req, res) => {
+    repository
+      .getAll()
+      .then(result => res.json(result))
+      .catch((err) => res.status(500).json(err));
+  }),
+
+  edit: function (req, res, next) {
+    res.send('Members get  editions');
+  },
+
+  update: function (req, res, next) {
+    res.send('Members update');
+  },
+
+  destroy: function (req, res, next) {
+    res.send('Members deleted');
+  },
 };
 
 module.exports = membersControllers;
