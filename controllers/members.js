@@ -37,7 +37,6 @@ let membersControllers={
       destroy:function(req,res,next){
         res.send('Members deleted');
       },
- 
 };
 
 module.exports = membersControllers;
