@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
+
   }
   Organization.init(
     {
@@ -28,5 +29,6 @@ module.exports = (sequelize, DataTypes) => {
       paranoid: true,
     }
   );
+
   return Organization;
 };

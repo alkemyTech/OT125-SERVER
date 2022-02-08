@@ -3,17 +3,22 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+var methodOverride = require('method-override');
 const cors = require('cors');
 require('dotenv').config();
 
-const indexRouter = require('./routes/index');
+const rolesRouter = require('./routes/role');
 const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
 const categoryRouter = require('./routes/categories');
 const newsRouter = require('./routes/news');
 const testimonialsRouter = require('./routes/testimonials');
 const orgRouter = require('./routes/organization');
+const membersRouter = require('./routes/members');
 
+const ActivitiesRouter = require('./routes/activities');
+const commentRouter = require('./routes/comment');
+const membersRouter = require('./routes/members');
 
 const app = express();
 app.use(cors());
@@ -27,14 +32,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(methodOverride('_method'));
 
-app.use('/', indexRouter);
+app.use('/roles', rolesRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/categories', categoryRouter);
 app.use('/news', newsRouter);
 app.use('/testimonials', testimonialsRouter);
 app.use('/organizations', orgRouter);
+app.use('/members', membersRouter);
+app.use('/activities', ActivitiesRouter);
+app.use('/comments', commentRouter);
+app.use('/members',membersRouter);
 
 
 // catch 404 and forward to error handler
