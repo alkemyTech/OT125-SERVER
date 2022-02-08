@@ -272,7 +272,7 @@ module.exports = {
       // }
     );
   },
-
+  
   down: async (queryInterface, Sequelize) => {
     const { sequelize } = queryInterface;
     try {
