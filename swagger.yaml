@@ -187,6 +187,52 @@ paths:
 
        
 
+  /users:
+    get:
+      summary: Returns a list of users
+      tags:
+        - users
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+          description: page number; default 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+          description: qty of user per page; default 10
+      responses:
+        '200':
+          description: list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  metadata:
+                    type: object
+                    properties:
+                      lastPage:
+                        type: number
+                        example: 3
+                      currentPage:
+                        type: number
+                        example: 1
+                      previousPage:
+                        type: number
+                        example: null
+                      nextPage:
+                        type: number
+                        example: 2
+
 components:
   schemas:
     User:
