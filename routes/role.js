@@ -1,9 +1,7 @@
-const express = require('express')
-const router = express.Router()
-const roleController = require('../controllers/roles')
+const express = require('express');
+const router = express.Router();
+const roleController = require('../controllers/roles');
 
-router.get('/', roleController.obtain)
-
-
+router.get('/', roleController.obtain);
 
 module.exports = router;
