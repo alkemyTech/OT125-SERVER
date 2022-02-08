@@ -5,9 +5,9 @@ const {
   createValidator,
   getOneValidator,
 } = require('../middleware/categoryValidation');
+
 const isAdmin = require('../middleware/isAdmin');
 const auth = require('../middleware/authenticate');
-
 
 /* GET categories */
 router.use(auth, isAdmin)
