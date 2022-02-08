@@ -1,20 +1,22 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-const membersControllers= require('../controllers/members');
-const isAdminMIddleware=require('../Middleware/isAdmin');
+const membersControllers = require('../controllers/members');
+const auth = require('../middleware/authenticate');
+const isAdmin = require('../middleware/isAdmin');
 
+router.use(auth);
 
-router.get('/', membersControllers.create);
+router.post('/', membersControllers.create);
 
-router.post('/create',isAdminMIddleware,membersControllers.store);
+router.put('/:id', membersControllers.edit);
 
-router.get('/edit/:id', membersControllers.edit);
+router.put('/:id', membersControllers.update);
 
-router.put('/edit/:id',isAdminMIddleware,membersControllers.update);
+router.delete('/:id', membersControllers.destroy);
 
-router.delete('/destroy/:id',isAdminMIddleware,membersControllers.destroy);
+router.use(isAdmin);
 
-
+router.get('/', membersControllers.findAll);
 
 module.exports = router;
