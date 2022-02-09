@@ -39,7 +39,7 @@ app.use('/auth', authRouter);
 app.use('/categories', categoryRouter);
 app.use('/news', newsRouter);
 app.use('/testimonials', testimonialsRouter);
-app.use('/organizations', orgRouter);
+app.use('/organization', orgRouter);
 app.use('/slides', slidesRouter);
 app.use('/members', membersRouter);
 app.use('/activities', ActivitiesRouter);
