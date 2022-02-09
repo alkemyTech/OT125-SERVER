@@ -39,7 +39,7 @@ module.exports = {
       await newServices.remove(req.params.id);
       res
         .status(200)
-        .json({ msg: `New ${req.params.id} removed successfully` });
+        .json({ msg: `News article with id ${req.params.id} removed successfully` });
     } catch (error) {
       next(error);
     }
