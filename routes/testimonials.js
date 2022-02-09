@@ -4,16 +4,17 @@ const testimonialsControllers = require('../controllers/testimonials');
 const auth = require('../middleware/authenticate');
 const isAdmin = require('../middleware/isAdmin');
 
-router.get('/create', testimonialsControllers.create);
+
+router.get('/',testimonialsControllers.findAll);
 
 router.use(auth, isAdmin);
 
-router.post('/create', testimonialsControllers.store);
+router.post('/', testimonialsControllers.create);
 
-router.get('/edit/:id', testimonialsControllers.edit);
+router.put('/:id',testimonialsControllers.update);
 
-router.put('/edit/:id', testimonialsControllers.update);
+router.delete('/:id', testimonialsControllers.destroy);
 
-router.delete('/destroy/:id', testimonialsControllers.destroy);
+
 
 module.exports = router;
