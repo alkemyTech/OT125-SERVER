@@ -19,6 +19,6 @@ module.exports.welcomeEmail = async (user) =>{
         console.log('Email sent successfully')
     } 
     catch(e){
-        console.log(e.message);
+        console.log('ErrorMailService:',e.message)
     }
 } 

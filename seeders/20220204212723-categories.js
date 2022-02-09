@@ -3,45 +3,40 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert(
-      'activities',
+      'Categories',
       [
         {
-          name: 'Actividad Test',
-          content: 'Demo',
-          image:
-            'https://live.staticflickr.com/65535/49737580966_d7eb77f786_b.jpg',
+          name: 'Category 1',
+          description: 'Common news',
+          image: 'https://i.imgur.com/cat1.jpg',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          name: 'Actividad Test2',
-          content: 'Demo2',
-          image:
-            'https://live.staticflickr.com/65535/49737580966_d7eb77f786_b.jpg',
+          name: 'Category 2',
+          description: 'ONG News',
+          image: 'https://i.imgur.com/cat1.jpg',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          name: 'Actividad Test3',
-          content: 'Demo3',
-          image:
-            'https://live.staticflickr.com/65535/49737580966_d7eb77f786_b.jpg',
+          name: 'Category 3',
+          description: 'Kids news',
+          image: 'https://i.imgur.com/cat1.jpg',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          name: 'Actividad Test4',
-          content: 'Demo3',
-          image:
-            'https://live.staticflickr.com/65535/49737580966_d7eb77f786_b.jpg',
+          name: 'Category 4',
+          description: 'Activities News',
+          image: 'https://i.imgur.com/cat1.jpg',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          name: 'Actividad Test5',
-          content: 'Demo3',
-          image:
-            'https://live.staticflickr.com/65535/49737580966_d7eb77f786_b.jpg',
+          name: 'Category 5',
+          description: 'Other News',
+          image: 'https://i.imgur.com/cat1.jpg',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -56,11 +51,11 @@ module.exports = {
       await sequelize.transaction(async (transaction) => {
         const options = { transaction };
         await sequelize.query('SET FOREIGN_KEY_CHECKS = 0', options);
-        await sequelize.query('TRUNCATE TABLE activities', options);
+        await sequelize.query('TRUNCATE TABLE Categories', options);
         await sequelize.query('SET FOREIGN_KEY_CHECKS = 1', options);
       });
     } catch (error) {
       console.log(error);
     }
-  }
+  },
 };

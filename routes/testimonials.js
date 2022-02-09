@@ -1,20 +1,19 @@
-var express = require('express');
-var router = express.Router();
-
-const testimonialsControllers= require('../controllers/testimonials');
-const isAdminMIddleware=require('../Middleware/isAdmin');
-
-router.get('/create',testimonialsControllers.create);
-
-router.post('/create',isAdminMIddleware,testimonialsControllers.store);
-
-router.get('/edit/:id',isAdminMIddleware,testimonialsControllers.edit);
-
-router.put('/edit/:id', isAdminMIddleware,testimonialsControllers.update);
-
-router.delete('/destroy/:id',isAdminMIddleware , testimonialsControllers.destroy);
+const express = require('express');
+const router = express.Router();
+const testimonialsControllers = require('../controllers/testimonials');
+const auth = require('../middleware/authenticate');
+const isAdmin = require('../middleware/isAdmin');
 
 
+router.get('/',testimonialsControllers.findAll);
+
+router.use(auth, isAdmin);
+
+router.post('/', testimonialsControllers.create);
+
+router.put('/:id',testimonialsControllers.update);
+
+router.delete('/:id', testimonialsControllers.destroy);
 
 
 

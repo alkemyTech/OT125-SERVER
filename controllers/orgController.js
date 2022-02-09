@@ -2,26 +2,17 @@ const repo = require('../repositories/organization');
 
 
 
-exports.orgGet = function(req,res) {
-    res.send('NOT IMPLEMENTED: Organization create');
-};
 
 exports.orgGetOne = async function(req,res) {
-    const data = await repo.getOneOrg(req.params.id);
-    res.json(data);
+    const data = await repo.getOneOrg();
+    res.json(data.response).status(data.statusCode);
 };
 
-module.exports.orgCreate = function(req,res) {
-    res.send('NOT IMPLEMENTED: Organization create')
-};
 
 exports.orgUpdate = async function(req,res) {
-    const data = await repo.updateOrg(req.params.id,req.body);
-    res.json(data);
+    const data = await repo.updateOrg(req.body);
+    res.json(data.response).status(data.statusCode);
 };
 
-module.exports.orgDelete = function(req,res) {
-    res.send('NOT IMPLEMENTED: Organization delete')
-};
 
 

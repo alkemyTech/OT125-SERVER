@@ -1,4 +1,5 @@
 const repo = require('../repositories/category')
+const service = require('../services/categories')
 
 
 module.exports = {
@@ -11,7 +12,7 @@ module.exports = {
     },
 
     getCategories: (req, res) => {
-        repo.getCategories().then(({ statusCode, response }) => {
+        service.getCategories(req.query.page).then(({ statusCode, response }) => {
             res.status(statusCode).json(response)
         }).catch(err => {
             res.status(500).json({ error: err })
@@ -37,7 +38,11 @@ module.exports = {
     },
 
     deleteCategory: (req, res) => {
-
+        repo.deleteCategory(req.params.id).then(({ statusCode, response }) => {
+            res.status(statusCode).json(response)
+        }).catch(err => {
+            res.status(500).json({ error: err })
+        })
     }
 
 }

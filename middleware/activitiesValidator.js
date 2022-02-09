@@ -1,10 +1,15 @@
-const { body,param } = require('express-validator');
+const { body,param,validationResult } = require('express-validator');
+const errHandler = require('./errorFilter')
 
 module.exports.create = [
-  body('name').notEmpty().isString(),
-  body('content').notEmpty().isString(),
-  body('image').notEmpty().isString(),
+  body('name').notEmpty().withMessage(`name is required`).isString().withMessage(`must be string`),
+  body('content').notEmpty().withMessage(`content is required`).isString().withMessage(`must be string`),
+  body('image').notEmpty().withMessage(`image is required`).isString().withMessage(`must be string`),
+  errHandler
+
 ];
 module.exports.validateId = [
-  param('id').notEmpty().isNumeric()
+  param('id').notEmpty().withMessage(`id is required`).isNumeric().withMessage(`must be integer`),
+  errHandler
+
 ]
