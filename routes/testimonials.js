@@ -7,7 +7,7 @@ const isAdmin = require('../middleware/isAdmin');
 
 router.get('/',isAdmin, testimonialsControllers.findAll);
 
-//router.use(auth, isAdmin);
+router.use(auth, isAdmin);
 
 router.post('/', testimonialsControllers.create);
 

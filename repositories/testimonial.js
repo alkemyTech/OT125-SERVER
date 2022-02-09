@@ -5,16 +5,23 @@ const responseParser = require('../utils/responseFormatter');
 
 module.exports.deleteTestimonial = async (ID) => {
 
-  let deleted = await db.Testimonial.destroy({
-    where: {
-      id: ID
-    }
-  }).then(dbResult => {
-    return responseParser({ statusCode: 200, object: { message: 'Success' } })
-  }).catch(SequelizeError => {
-    return responseParser({ error: errP(SequelizeError) })
-  })
-  return deleted;
+  const res = await db.Testimonial.findOne({ where: { id: ID } })
+        .then(dbResult => {
+            if (!dbResult) {
+                const err = new Error()
+                err.name = 'not_found';
+                err.entity = { name: 'Testimonial', key: 'id', keyValue: ID }
+                return responseParser({ error: errP(err) })
+            } else {
+                dbResult.destroy().then(deleted => deleted)
+                return responseParser({ statusCode: 202, object: { deleteStatus: `Testimonial with id ${ID} deleted successfully.` } })
+            }
+        }
+        ).catch(err => {
+            return responseParser({ error: errP(err) })
+        })
+
+    return res;
 }
 
 module.exports.updateTestimonial = async (id, body) => {

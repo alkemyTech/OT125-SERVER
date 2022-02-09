@@ -20,7 +20,7 @@ let testimonialsControllers={
 
     update: async function(req,res,next){
       const data = await testimonialRepository.updateTestimonial(req.params.id,req.body);
-      res.json(data);
+      res.json(data.response).status(data.statusCode);
       
     },
 
