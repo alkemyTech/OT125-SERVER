@@ -262,7 +262,7 @@ paths:
                 - image
       responses:
         '200':
-          $ref: '#/components/responses/validAuth'
+          $ref: '#/components/responses/ActivityResponse'
         '400':
           $ref: '#/components/responses/ValidationErrors'
         '403':
@@ -307,7 +307,7 @@ paths:
                 - image
       responses:
         '200':
-          $ref: '#/components/responses/validAuth'
+          $ref: '#/components/responses/ActivityUpdated'
         '400':
           $ref: '#/components/responses/ValidationErrors'
         '403':
@@ -413,6 +413,47 @@ components:
          previousPage:
              type: integer 
              example: 1
+    Activity:
+       type: object
+       required:
+        - name
+        - content
+        - image
+       properties:
+        name: 
+          type: string
+          example: Test Activity 33
+        content:
+          type: string
+          example: Sample content of activity
+        image: 
+          type: string
+          example: https://live.staticflickr.com/65535/49737580966_d7eb77f786_b.jpg
+        deletedAt: 
+          type: string
+          example: "(NULL)"
+        createdAt: 
+          type: string
+          example: "2022-02-03T04:09:51.592Z"
+        updatedAt: 
+          type: string
+          example: "2022-02-03T04:09:51.592Z" 
+    ActivityObject:
+       type: object
+       required:
+        - name
+        - content
+        - image
+       properties:
+        name: 
+          type: string
+          example: Test Activity 33
+        content:
+          type: string
+          example: Sample content of activity
+        image: 
+          type: string
+          example: https://live.staticflickr.com/65535/49737580966_d7eb77f786_b.jpg
      
   responses:
     JWT:
@@ -529,6 +570,24 @@ components:
               error: 
                 type: string
                 example: Entity with id X doesn't exists.
+    ActivityResponse:
+      description: A json data response for activity
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: 
+                $ref: '#/components/schemas/Activity'
+    ActivityUpdated:
+      description: A json data response for activity
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: 
+                $ref: '#/components/schemas/ActivityObject'
 
 
   securitySchemes:
