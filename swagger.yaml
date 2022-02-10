@@ -1,7 +1,8 @@
 openapi: 3.0.0
 info:
-  title: ONG API
-  version: 0.1.0
+  title: Somos más API
+  description: API project "Somos más" for Alkemy Labs - January/February 2022 - ©Llamarada Node Team
+  version: 1.0.0
 
 servers:
   - url: http://localhost:3000
@@ -14,7 +15,7 @@ paths:
     post:
       summary: Creates an user and returns an access token
       tags:
-        - authorization
+        - Authorization
       requestBody:
         description: information of the account to be created
         required: true
@@ -60,7 +61,7 @@ paths:
     post:
       summary: Validates credentials and returns access token
       tags:
-        - authorization
+        - Authorization
       requestBody:
         description: credentials to login into account
         required: true
@@ -218,7 +219,7 @@ paths:
     get:
       summary: Returns a list of users
       tags:
-        - users
+        - Users
       parameters:
         - in: query
           name: page
@@ -625,6 +626,8 @@ components:
       description: 'note: non-oauth scopes are not defined at the securityScheme level'
 
 tags:
-  - name: authorization
+  - name: Authorization
   - name: Categories
     description: Categories CRUD
+  - name: Activities
+    description: Activities CRUD
