@@ -182,8 +182,12 @@
         <h1
         style="
         text-align: center;
-        font-size: 3rem;"
-        >Bienvenido</h1>
+        font-size: 2rem;"
+        >Te damos la bienvenida</h1>
+
+        <% if(user)  { %>
+          <h2 style="text-align: center;"><%= user.firstName%> <%=user.lastName%></h4>
+          <%  }  %>
       
         <img
           src="https://i.imgur.com/qrosMOI.png"
@@ -204,20 +208,23 @@
           font-size: 1.3rem; 
           text-align: center;
           "
-          >Gracias por unirte</h3>
+          >Tu registro se completo exitosamente.</h3>
         </p>
 
         <div
           style="
             font-family: Ubuntu, Helvetica, Arial, sans-serif;
-            font-size: 11px;
+            font-size: 10px;
             line-height: 1.5;
             text-align: left;
             color: #000000;
           "
         >
-          <p style="text-align: center">Datos de contacto de ONG</p>
-        </div>
+
+        <% if(org)  { %>
+          <p style="text-align: center;"><%= org.name%> - Tel. +54<%=org.phone%> - <%=org.address%> </h4>
+          <%  }  %>
+        </div> 
       </div>
     </div>
   </body>
