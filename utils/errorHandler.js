@@ -21,14 +21,16 @@ module.exports.SequelizeErrorParser = (error) => {
       case 'SequelizeForeignKeyConstraintError':
         errResult = {
           statusCode: 400,
-          message: `One or more of the provided ids, doesn't corresponds to an ${entity.name}.`,
+          message: `One or more of the provided ids, doesn't corresponds to an ${
+            entity?.name || ''
+          }.`,
         };
         break;
 
       case 'SequelizeUniqueConstraintError':
         errResult = {
           statusCode: 409,
-          message: `Unique value duplicated on ${entity.name}.`,
+          message: `Unique value duplicated on ${entity?.name || ''}.`,
         };
         break;
 
@@ -53,7 +55,9 @@ module.exports.handleError = (error) => {
   switch (name) {
     case 'not_found':
       errResult = {
-        message: `${entity.name} with ${entity.key} ${entity.keyValue} doesn't exists.`,
+        message: `${entity?.name || ''} with ${entity?.key || ''} ${
+          entity?.keyValue || ''
+        } doesn't exists.`,
         statusCode: 404,
       };
       if (entity.name === 'User') {
@@ -64,7 +68,9 @@ module.exports.handleError = (error) => {
     case 'duplicated_entry':
       {
         errResult = {
-          message: `The ${entity.name} with ${entity.key} ${entity.keyValue} already exists in DB.`,
+          message: `The ${entity?.name || ''} with ${entity?.key || ''} ${
+            entity?.keyValue || ''
+          } already exists in DB.`,
           statusCode: 409,
         };
       }
