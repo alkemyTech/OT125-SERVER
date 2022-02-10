@@ -6,10 +6,12 @@ const validator = require('../middleware/commentsValidator');
 
 const isAdmin = require('../middleware/isAdmin');
 const auth = require('../middleware/authenticate');
+const adminOwner = require('../middleware/adminOrOwner');
 
-// @todo implement middleware for owener || admin and add
+router.use(auth);
 router.post('/', validator.create, controller.create);
-router.get('/', controller.getAll);
+router.get('/', isAdmin, controller.getAll);
+router.use('/:id', adminOwner('Comment'));
 router.put('/:id', validator.update, controller.updateOne);
 router.delete('/:id', controller.delete);
 

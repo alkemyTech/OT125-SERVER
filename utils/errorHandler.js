@@ -77,7 +77,7 @@ module.exports.handleError = (error) => {
       break;
 
     default:
-      if (error.name.includes('Sequelize')) {
+      if (error?.name?.includes('Sequelize')) {
         errResult = this.SequelizeErrorParser(error);
         break;
       } else {
