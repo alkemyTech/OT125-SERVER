@@ -45,6 +45,13 @@ app.use('/members', membersRouter);
 app.use('/activities', ActivitiesRouter);
 app.use('/comments', commentRouter);
 
+//Swagger docs
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerFile = YAML.load('./swagger.yaml')
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
