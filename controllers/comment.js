@@ -1,6 +1,5 @@
 const commentRepository = require('../repositories/comment');
 const asyncWrapper = require('../utils/asyncWrapper');
-const { handleError } = require('../utils/errorHandler');
 
 module.exports.getAll = asyncWrapper(async (req, res, next) => {
   const result = await commentRepository.getAll(req.query);
