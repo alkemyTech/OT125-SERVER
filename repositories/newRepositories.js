@@ -18,4 +18,9 @@ module.exports = {
   remove: async (id) => {
     return await db.New.destroy({ where: { id: id } });
   },
+  getComments: async function (id) {
+    const news = await this.getOne(id);
+    console.log(news);
+    return await news?.getComments();
+  },
 };

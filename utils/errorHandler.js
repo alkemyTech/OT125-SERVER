@@ -55,12 +55,12 @@ module.exports.handleError = (error) => {
   switch (name) {
     case 'not_found':
       errResult = {
-        message: `${entity?.name || ''} with ${entity?.key || ''} ${
+        message: `${entity?.name || 'Document'} with ${entity?.key || ''} ${
           entity?.keyValue || ''
         } doesn't exists.`,
         statusCode: 404,
       };
-      if (entity.name === 'User') {
+      if (entity?.name === 'User') {
         errResult.statusCode = 400;
       }
       break;

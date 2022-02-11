@@ -1,4 +1,5 @@
 const newServices = require('../services/newServices');
+const asyncWrapper = require('../utils/asyncWrapper');
 
 module.exports = {
   create: async (req, res, next) => {
@@ -37,11 +38,15 @@ module.exports = {
   remove: async (req, res, next) => {
     try {
       await newServices.remove(req.params.id);
-      res
-        .status(200)
-        .json({ msg: `News article with id ${req.params.id} removed successfully` });
+      res.status(200).json({
+        msg: `News article with id ${req.params.id} removed successfully`,
+      });
     } catch (error) {
       next(error);
     }
   },
+  getComments: asyncWrapper(async (req, res, next) => {
+    const comments = await newServices.getComments(req.params.id);
+    res.json({ data: comments });
+  }),
 };
