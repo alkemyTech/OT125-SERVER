@@ -22,6 +22,6 @@ router.get('/:id', authenticate, isAdmin, validatorGetOne, getOne);
 router.post('/', authenticate, isAdmin, validatorCreate, create);
 router.put('/:id', authenticate, isAdmin, validatorUpdate, update);
 router.delete('/:id', authenticate, isAdmin, validatorRemove, remove);
-router.get('/:id/comments', getComments);
+router.get('/:id/comments', authenticate, getComments);
 
 module.exports = router;
