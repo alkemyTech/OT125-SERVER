@@ -16,7 +16,7 @@ const testimonialsController = {
   },
 
   update: async function (req, res, next) {
-    const data = await testimonialRepository.updateTestimonial(req.params.id, req.body);
+    const data = await repo.updateTestimonial(req.params.id, req.body);
     res.json(data.response).status(data.statusCode);
 
   },

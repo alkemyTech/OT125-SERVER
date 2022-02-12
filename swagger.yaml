@@ -341,8 +341,87 @@ paths:
           $ref: '#/components/responses/GenericError'
         '500':
           $ref: '#/components/responses/GenericError'
+  
+  /testimonials/{id}:
+    put:
+       summary: Update an existing testimonial
+       tags:
+        - Testimonials
+       parameters:
+         - in: path
+           name: id
+           schema:
+            type: integer
+           required: true
+       requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestimonialObject'
+        required: true
+       responses:
+        '200':
+          $ref: '#/components/responses/TestimonialResponse'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+       security:
+        - BearerAuth: []
+    delete: 
+      summary: Delete a specific testimonial
+      parameters:
+         - in: path
+           name: id
+           schema:
+            type: integer
+           required: true
+      tags:
+      - Testimonials
+      responses:
+       '202':
+         $ref: '#/components/responses/TestimonialDeleted'
+       '400':
+          $ref: '#/components/responses/ValidationErrors'
+       '401':
+          description: Token missing in header.
+       '403':
+          description: Insufficient permissions.
+       '404':
+          $ref: '#/components/responses/EntityNotFound'
+      security:
+        - BearerAuth: []
 
-
+  /members:
+  
+    post:
+       summary: Create a new member
+       tags:
+        - Members
+       requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberObject'
+        required: true
+       responses:
+        '201':
+          $ref: '#/components/responses/MemberResponse'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions. 
+        '409':
+          description: Member name already exists on database.
+       security:
+        - BearerAuth: []  
+     
+       
+ 
 
 
 components:
@@ -440,6 +519,98 @@ components:
          previousPage:
              type: integer 
              example: 1
+      
+    TestimonialObject:
+       type: object
+       required:
+        - name
+       properties:
+        name: 
+         type: string
+         example: testimonial 1
+        image: 
+         type: string
+         example: https://i.imgur.com/example-testimonial.jpg
+        content:
+         type: string
+         example: Sample content of testimonial
+    Testimonial:
+     type: object
+     properties:
+       id: 
+        type: integer
+        example: 1
+       name: 
+        type: string
+        example: testimonial 1
+       image: 
+        type: string
+        example: https://i.imgur.com/example-testimonial.jpg
+       content:
+        type: string
+        example: Sample description of testimonial
+       createdAt: 
+        type: string
+        example: "2022-02-03T04:09:51.592Z"
+       updatedAt: 
+        type: string
+        example: "2022-02-03T04:09:51.592Z" 
+
+    MemberObject:
+       type: object
+       required:
+        - name
+       properties:
+        name: 
+         type: string
+         example: member 1
+        facebookUrl: 
+         type: string
+         example: https://i.imgur.com/example-member.jpg
+        instagramUrl: 
+         type: string
+         example: https://i.imgur.com/example-member.jpg
+        linkedinUrl: 
+         type: string
+         example: https://i.imgur.com/example-member.jpg
+        image: 
+         type: string
+         example: https://i.imgur.com/example-member.jpg
+        description:
+         type: string
+         example: Sample content of member
+    Member:
+     type: object
+     properties:
+       id: 
+        type: integer
+        example: 1
+       name: 
+        type: string
+        example: member 1
+       facebookUrl: 
+         type: string
+         example: https://i.imgur.com/example-member.jpg
+       instagramUrl: 
+         type: string
+         example: https://i.imgur.com/example-member.jpg
+       linkedinUrl: 
+         type: string
+         example: https://i.imgur.com/example-member.jpg
+       image: 
+        type: string
+        example: https://i.imgur.com/example-member.jpg
+       description:
+        type: string
+        example: Sample description of member
+       createdAt: 
+        type: string
+        example: "2022-02-03T04:09:51.592Z"
+       updatedAt: 
+        type: string
+        example: "2022-02-03T04:09:51.592Z" 
+    
+        
      
   responses:
     JWT:
@@ -546,6 +717,42 @@ components:
                   deleteStatus:
                      type: string
                      example: Category with id 17 deleted successfully.
+
+    TestimonialResponse:
+      description: A json data response for testimonial
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: 
+                $ref: '#/components/schemas/Testimonial'
+    TestimonialDeleted:
+      description: Success deleted message
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: 
+                type: object
+                properties:
+                  deleteStatus:
+                     type: string
+                     example: Testimonial with id 17 deleted successfully.
+
+    MemberResponse:
+      description: A json data response for member
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: 
+                $ref: '#/components/schemas/Member'
+    
+     
+
     EntityNotFound:
       description: Error message when required entity doesn't exists in database.
       content:

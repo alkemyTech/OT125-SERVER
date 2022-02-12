@@ -27,7 +27,7 @@ module.exports.updateTestimonial = async (id, body) => {
     })
 
     if (!testimonialFound) {
-      return responseParser({ error: errP({ name: 'not_found', entity: { name: 'Testimonial', key: 'ID', keyvalue: id } }) })
+      return responseParser({ error: errP({ name: 'not_found', entity: { name: 'Testimonial', key: 'id', keyValue: id } }) })
     } else {
       const update = await testimonialFound.update({
         name: body.name,
