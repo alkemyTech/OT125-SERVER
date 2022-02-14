@@ -12,7 +12,7 @@ module.exports = {
   },
   getAll: async (req, res, next) => {
     try {
-      let allNews = await newServices.getAll();
+      let allNews = await newServices.getAll(req);
       res.status(200).json({ length: allNews.length, data: allNews });
     } catch (error) {
       next(error);
@@ -39,7 +39,7 @@ module.exports = {
       await newServices.remove(req.params.id);
       res
         .status(200)
-        .json({ msg: `News article with id ${req.params.id} removed successfully` });
+        .json({ msg: `New ${req.params.id} removed successfully` });
     } catch (error) {
       next(error);
     }
