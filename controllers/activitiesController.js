@@ -7,24 +7,35 @@ exports.create = asyncWrapper(async (req, res, next) => {
   const body = { name: req.body.name, content: req.body.content, image: req.body.image }
 
   await repository.create(body, cb => {
-    if (cb.message) {
+    if (cb[1]) {
       res
-        .status(errJSON.statusCode)
-        .json({ errors: [{ msg: errJSON.message }] });
+        .status(cb[1].statusCode)
+        .json({ errors: [{ msg: cb[1].message }] });
     } else {
-      res.status(201).json(cb)
+      res.status(201).json(cb[0])
     }
   })
 
 });
 
 //Get all activities
-exports.findAll = (req, res) => {
-
-};
+exports.findAll = async (req, res) => {
+  [result,err] = await repository.getone()
+  if (err) {
+    return res.json( err );
+  } else {
+    res.status(200).json(result)
+  }
+}
 
 // Find one by ID
-exports.findOne = (req, res) => {
+exports.findOne = async(req, res) => {
+  [result,err] = await repository.getone(req.params.id)
+  if (err) {
+    return res.json( err );
+  } else {
+    res.status(200).json(result)
+  }
 
 };
 
