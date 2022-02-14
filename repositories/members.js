@@ -95,11 +95,12 @@ exports.delete = async (_id) => {
       return err
     }else{
       result.destroy().then(deleted => deleted)
-      return responseParser({ statusCode: 202, object: { deleteStatus: `Member with id ${id} deleted successfully.` } })
+      return { statusCode: 202, message: { deleteStatus: `Member with id ${_id} deleted successfully.` } }
     }
 
-  }catch(e){
-    return e
+  }catch(err){
+    errJSON = handleError(err);
+    return errJSON
 
   }
 

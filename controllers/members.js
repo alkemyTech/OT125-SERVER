@@ -1,3 +1,4 @@
+const { response } = require('express');
 const repository = require('../repositories/members');
 const asyncWrapper = require('../utils/asyncWrapper');
 
@@ -38,7 +39,7 @@ let membersControllers = {
   findOne:async(req, res)=>{
     [result,err] = await repository.getOne(req.params.id)
     if (err) {
-      return res.json( err );
+      return res.status(err.statusCode).json( err );
     } else {
       res.status(200).json(result)
     }
@@ -66,8 +67,12 @@ let membersControllers = {
   },
 
   destroy: async (req, res, next) =>{
-    result = await repository.delete(req.params.id)
-    res.json(result)
+    const {...response}  = await repository.delete(req.params.id);
+    if (response.message){
+      res.status(response.statusCode).json(response)
+    }else{
+      res.status(response.statusCode).json(response)
+    }
   },
 };
 
