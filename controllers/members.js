@@ -35,12 +35,39 @@ let membersControllers = {
     res.send('Members get  editions');
   },
 
-  update: function (req, res, next) {
-    res.send('Members update');
+  findOne:async(req, res)=>{
+    [result,err] = await repository.getOne(req.params.id)
+    if (err) {
+      return res.json( err );
+    } else {
+      res.status(200).json(result)
+    }
   },
 
-  destroy: function (req, res, next) {
-    res.send('Members deleted');
+  update: async (req, res, next)=> {
+    const _id = req.params.id;
+    const body = {
+      name: req.body.name,
+      facebookUrl: req.body.facebookUrl,
+      instagramUrl: req.body.instagramUrl,
+      linkedinUrl: req.body.linkedinUrl,
+      image: req.body.image,
+      description: req.body.description
+    }
+    await repository.setOne(_id, body, cb => {
+      if (cb[1]) {
+        res
+          .status(cb[1].statusCode)
+          .json({ errors: [{ msg: cb[1].message }] });
+      } else {
+        res.json(cb[0])
+      }
+    })
+  },
+
+  destroy: async (req, res, next) =>{
+    result = await repository.delete(req.params.id)
+    res.json(result)
   },
 };
 
