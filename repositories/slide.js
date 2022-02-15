@@ -24,7 +24,7 @@ exports.findAll = (req, res) => {
 exports.findId = async function (req) {
      
     const oneSlide2 = await Slide.findOne({
-        attributes: ['imageUrl', 'text' ],
+        attributes: ['imageUrl', 'text', 'order', 'organizationId' ],
         where: { 
           id: req
         }
