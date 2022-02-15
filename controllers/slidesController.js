@@ -1,16 +1,29 @@
+const db = require('../models/slide')
 const repo = require('../repositories/slide');
+const { Slide } = require('../models/index')
 
 let slidesController={
 
-    create:function(req, res, next) {
-        res.send('Slidescreate, not implemented yet')
-      },
+    create: async function (req, res) {
+      try {
+        const data = await repo.create(req.body);
+        res.json(data.reponse).status(data.statusCode)
+      } catch (error) {
+        res.json({ msg: error }).status(500)
+      }
+    },
+
     findAll:function(req, res, next) {
         res.send('SlidesfindAll, not implemented yet')
       },
-    findId:function(req, res, next) {
-      repo.findId();
-      },
+
+    findId: async function (req, res)  {
+     
+      const oneSlide = await repo.findId(req.params.id);
+      res.send(oneSlide)  
+      
+    },
+
     update:function(req, res, next) {
         res.send('Slidesupdate, not implemented yet')
       },
