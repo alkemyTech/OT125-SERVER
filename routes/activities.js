@@ -16,7 +16,7 @@ router.post('/', isAdmin,validator.create,controller.create);
 //PATCH
 router.put('/:id',isAdmin,validator.validateId,controller.update);
 //DELETE
-router.delete('/');
+router.delete('/:id',isAdmin,validator.validateId,controller.delete);
 
 
 module.exports = router;
