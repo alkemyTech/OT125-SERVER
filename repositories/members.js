@@ -21,14 +21,14 @@ exports.create = async (member, cb) => {
         err.name = 'duplicated_entry';
         err.entity={name:'member',key:'name',keyValue:member.name}
         errJSON = handleError(err)
-        return cb(errJSON)
+        return cb([null,errJSON])
 
       }
-      return cb(result[0]);
+      return cb([result[0],null]);
     })
     .catch((err) => {
       errJSON = handleError(err);
-      return cb(errJSON);
+      return cb([null,errJSON]);
     });
 };
 
@@ -92,15 +92,20 @@ exports.delete = async (_id) => {
   try{
     [result,err] = await this.getOne(_id)
     if (err){
-      return err
+      let err = new Error(`not_found`);
+      err.name = 'not_found';
+      err.entity={name:'Activity',key:'id',keyValue:_id};
+      errJSON = handleError(err)
+      return [null,errJSON]
     }else{
       result.destroy().then(deleted => deleted)
-      return { statusCode: 202, message: { deleteStatus: `Member with id ${_id} deleted successfully.` } }
+      let response = { statusCode: 202, message: { deleteStatus: `Member with id ${_id} deleted successfully.` } }
+      return [response,null]
     }
 
   }catch(err){
     errJSON = handleError(err);
-    return errJSON
+    return [null,errJSON]
 
   }
 

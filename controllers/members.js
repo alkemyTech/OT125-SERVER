@@ -3,7 +3,7 @@ const repository = require('../repositories/members');
 const asyncWrapper = require('../utils/asyncWrapper');
 
 let membersControllers = {
-  create: asyncWrapper(async (req, res, next) => {
+  create: async (req, res) => {
     const body = { 
       name: req.body.name,
       facebookUrl: req.body.facebookUrl,
@@ -13,16 +13,14 @@ let membersControllers = {
       description: req.body.description
     };
 
-    await repository.create(body, (cb) => {
-      if (cb.message) {
-        res
-          .status(errJSON.statusCode)
-          .json({ errors: [{ msg: errJSON.message }] });
+    await repository.create(body, cb => {
+      if (cb[1]) {
+        res.status(cb[1].statusCode).json(cb[1]);
       } else {
-        res.json(cb);
+        res.json(cb[0]);
       }
     });
-  }),
+  },
 
   //Get all activities
   findAll: asyncWrapper(async (req, res) => {
@@ -31,10 +29,6 @@ let membersControllers = {
       .then(result => res.json(result))
       .catch((err) => res.status(500).json(err));
   }),
-
-  edit: function (req, res, next) {
-    res.send('Members get  editions');
-  },
 
   findOne:async(req, res)=>{
     [result,err] = await repository.getOne(req.params.id)
@@ -45,7 +39,7 @@ let membersControllers = {
     }
   },
 
-  update: async (req, res, next)=> {
+  update: async (req, res)=> {
     const _id = req.params.id;
     const body = {
       name: req.body.name,
@@ -57,23 +51,21 @@ let membersControllers = {
     }
     await repository.setOne(_id, body, cb => {
       if (cb[1]) {
-        res
-          .status(cb[1].statusCode)
-          .json({ errors: [{ msg: cb[1].message }] });
+        res.status(cb[1].statusCode).json(cb[1]);
       } else {
-        res.json(cb[0])
+        res.json(cb[0]);
       }
     })
   },
 
   destroy: async (req, res, next) =>{
-    const {...response}  = await repository.delete(req.params.id);
-    if (response.message){
-      res.status(response.statusCode).json(response)
-    }else{
-      res.status(response.statusCode).json(response)
+    [result, err] = await repository.delete(req.params.id);
+    if (err) {
+      res.status(err.statusCode).json(err)
     }
-  },
+    res.status(result.statusCode).json(result)
+
+  }
 };
 
 module.exports = membersControllers;
