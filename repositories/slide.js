@@ -28,7 +28,17 @@ exports.findId = async function (req) {
         where: { 
           id: req
         }
-    });
+    })
+    .then(dbResult => {
+      if (!dbResult) {
+          const err = new Error()
+          err.name = 'not_found';
+          err.entity = { name: 'slide', key: 'id', keyValue: req }
+          return responseParser({ error: errP(err) })
+      }
+      return responseParser({ statusCode: 200, object: dbResult })
+  }
+  )
       return(oneSlide2)  
     
   },
