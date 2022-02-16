@@ -97,3 +97,10 @@ module.exports.delete = asyncWrapper(async (req, res, next) => {
   console.log(user);
   return res.status(200).json({ data: user });
 });
+
+
+module.exports.getLoginData = asyncWrapper(async(req,res,next)=>{
+delete req.currentUser.iat;
+delete req.currentUser.exp;
+return res.status(200).json({loginData:req.currentUser})
+})
