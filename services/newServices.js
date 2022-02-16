@@ -36,4 +36,13 @@ module.exports = {
       throw error;
     }
   },
+  getComments: async (id) => {
+    const comments = await newsRepository.getComments(id);
+    if (!comments) {
+      const error = new Error(`Not found id: ${id}`);
+      error.name = 'not_found';
+      throw error;
+    }
+    return comments;
+  },
 };

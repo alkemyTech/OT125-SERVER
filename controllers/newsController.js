@@ -1,4 +1,5 @@
 const newServices = require('../services/newServices');
+const asyncWrapper = require('../utils/asyncWrapper');
 
 module.exports = {
   create: async (req, res, next) => {
@@ -44,4 +45,8 @@ module.exports = {
       next(error);
     }
   },
+  getComments: asyncWrapper(async (req, res, next) => {
+    const comments = await newServices.getComments(req.params.id);
+    res.json({ data: comments });
+  }),
 };
