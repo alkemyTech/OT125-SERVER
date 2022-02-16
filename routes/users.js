@@ -7,7 +7,7 @@ const auth = require('../middleware/authenticate');
 
 router.use(auth,isAdmin)
 router.get('/', userController.getAll);
-
+router.patch('/:id', userController.upDate)
 router.delete('/:id', userController.delete);
 
 module.exports = router;

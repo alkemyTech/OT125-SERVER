@@ -97,3 +97,15 @@ module.exports.delete = asyncWrapper(async (req, res, next) => {
   console.log(user);
   return res.status(200).json({ data: user });
 });
+
+module.exports.upDate = asyncWrapper(async (req, res, next) => {
+
+  const [response, err] = userRepository.upDateUser(req.params.id);
+  if (err) {
+    errJSON = handleError(err);
+    return res
+      .status(errJSON.statusCode)
+      .json({ errors: [{ msg: errJSON.message }] });
+  }
+  return res.status(200).json({ data: response });
+});
