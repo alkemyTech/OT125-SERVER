@@ -4,8 +4,8 @@ module.exports = {
   create: async (data) => {
     return await db.New.create(data);
   },
-  getAll: async () => {
-    return await db.New.findAll({ include: [{ association: 'category' }] });
+  getAll: async (offset, limit) => {
+    return await db.New.findAndCountAll({offset, limit});
   },
   getOne: async (id) => {
     return await db.New.findByPk(id, {
