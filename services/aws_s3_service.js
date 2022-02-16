@@ -1,6 +1,5 @@
 const AWS = require('aws-sdk');
 const { PUBLIC_KEY, SECRET_KEY, BUCKET_NAME } = process.env
-require('dotenv').config();
 
 /**
  * Upload an image to a S3 Bucket
