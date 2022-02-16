@@ -3,17 +3,20 @@ const router = express.Router();
 const controller = require('../controllers/activitiesController');
 const validator = require('../middleware/activitiesValidator')
 
+const isAdmin = require('../middleware/isAdmin');
+const auth = require('../middleware/authenticate');
+
+router.use(auth);
+
 //GET
-router.get('/', (req,res)=>{
-  res.send('get to Activities working')
-})
-router.get('/:id');
+router.get('/', controller.findAll)
+router.get('/:id',validator.validateId,controller.findOne);
 //POST
-router.post('/', validator.create,controller.create);
+router.post('/', isAdmin,validator.create,controller.create);
 //PATCH
-router.put('/:id',validator.validateId,controller.update);
+router.put('/:id',isAdmin,validator.validateId,controller.update);
 //DELETE
-router.delete('/');
+router.delete('/:id',isAdmin,validator.validateId,controller.delete);
 
 
 module.exports = router;

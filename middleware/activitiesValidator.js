@@ -9,7 +9,7 @@ module.exports.create = [
 
 ];
 module.exports.validateId = [
-  param('id').notEmpty().withMessage(`id is required`).isNumeric().withMessage(`must be integer`),
+  param('id').notEmpty().withMessage(`id is required`).isInt().withMessage(`must be integer`),
   errHandler
 
 ]
