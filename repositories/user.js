@@ -78,3 +78,16 @@ module.exports.deleteUser = async (ID) => {
     throw e;
   }
 };
+
+module.exports.upDateUser = async (ID) => {
+  try {
+      await db.User.update({
+      where: {
+        id: ID,
+      },
+    });
+    return ['User update', null];
+  } catch (e) {
+    return [null, e];
+  }
+};

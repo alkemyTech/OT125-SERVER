@@ -80,6 +80,19 @@ module.exports.delete = asyncWrapper(async (req, res, next) => {
 });
 
 
+module.exports.upDate = asyncWrapper(async (req, res, next) => {
+
+  const [response, err] = userRepository.upDateUser(req.params.id);
+  if (err) {
+    errJSON = handleError(err);
+    return res
+      .status(errJSON.statusCode)
+      .json({ errors: [{ msg: errJSON.message }] });
+  }
+  return res.status(200).json({ data: response });
+});
+
+
 module.exports.getLoginData = asyncWrapper(async(req,res,next)=>{
 delete req.currentUser.iat;
 delete req.currentUser.exp;
