@@ -13,7 +13,6 @@ module.exports = {
     getContacts: async (req, res) => {
         try {
             const data = await repo.getContacs();
-            console.log(data);
             res.json(data.response).status(data.statusCode)
         } catch (error) {
             console.error(error);
