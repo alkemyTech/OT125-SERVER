@@ -1,6 +1,6 @@
 const { Contacts } = require('../models/index');
 const responseParser = require('../utils/responseFormatter');
-const { sendContactEmail } = require('../services/contactEmail');
+const { formReceivedEmail } = require('../services/email');
 
 module.exports.createContact = async (body) => {
     try {
@@ -10,7 +10,7 @@ module.exports.createContact = async (body) => {
             email: body.email,
             message: body.message
         });
-        sendContactEmail(newContact);
+        formReceivedEmail(newContact);
         return responseParser({ statusCode: 201, object: newContact });
     } catch (error) {
         return { statusCode: 500, response: { error: error } };
