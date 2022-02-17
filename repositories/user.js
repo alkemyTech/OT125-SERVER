@@ -6,13 +6,12 @@ const db = require('../models/index');
  * @returns {Promise.<[Object|null,Error|null]>} instance of db.User or Error
  */
 module.exports.saveOne = async (body) => {
-  let user = db.User.build(body);
-
   try {
+    let user = db.User.build(body);
     await user.save();
-    return [user, null];
+    return user;
   } catch (e) {
-    return [null, e];
+    throw e;
   }
 };
 
@@ -24,15 +23,14 @@ module.exports.saveOne = async (body) => {
 module.exports.getByEmail = async (email) => {
   try {
     let user = await db.User.findOne({ where: { email } });
-    if (!user) {
-      let err = new Error();
-      err.name = 'not_found';
-      err.entity = { name: 'User', key: 'email', keyValue: email };
-      return [null, err];
-    }
-    return [user, null];
+    if (user) return user;
+
+    let err = new Error();
+    err.name = 'not_found';
+    err.entity = { name: 'User', key: 'email', keyValue: email };
+    throw err;
   } catch (e) {
-    return [null, e];
+    throw e;
   }
 };
 
@@ -54,20 +52,17 @@ module.exports.getAll = async (opts) => {
       offset,
     });
 
-    return [
-      {
-        users: rows,
-        metadata: {
-          lastPage: Math.ceil(count / limit),
-          currentPage: page,
-          previousPage: page > 1 ? page - 1 : null,
-          nextPage: count / limit > page ? page + 1 : null,
-        },
+    return {
+      users: rows,
+      metadata: {
+        lastPage: Math.ceil(count / limit),
+        currentPage: page,
+        previousPage: page > 1 ? page - 1 : null,
+        nextPage: count / limit > page ? page + 1 : null,
       },
-      null,
-    ];
+    };
   } catch (e) {
-    return [null, e];
+    throw e;
   }
 };
 
@@ -80,7 +75,7 @@ module.exports.deleteUser = async (ID) => {
     });
     return [deleted, null];
   } catch (e) {
-    return [null, e];
+    throw e;
   }
 };
 

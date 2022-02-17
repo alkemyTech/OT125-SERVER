@@ -24,13 +24,7 @@ module.exports.register = asyncWrapper(async (req, res, next) => {
   }
   body.roleId = role.id;
 
-  const [user, err] = await userRepository.saveOne(body);
-  if (err) {
-    errJSON = handleError(err);
-    return res
-      .status(errJSON.statusCode)
-      .json({ errors: [{ msg: errJSON.message }] });
-  }
+  user = await userRepository.saveOne(body);
 
   delete user.dataValues.password;
   delete user.dataValues.deletedAt;
@@ -46,13 +40,7 @@ module.exports.register = asyncWrapper(async (req, res, next) => {
 module.exports.login = asyncWrapper(async (req, res, next) => {
   const { email, password } = req.body;
 
-  const [user, err] = await userRepository.getByEmail(email);
-  if (err) {
-    errJSON = handleError(err);
-    return res
-      .status(errJSON.statusCode)
-      .json({ errors: [{ msg: errJSON.message }] });
-  }
+  const user = await userRepository.getByEmail(email);
 
   const validPass = await user.validatePassword(password);
   if (!validPass)
@@ -70,14 +58,7 @@ module.exports.login = asyncWrapper(async (req, res, next) => {
  * @route GET /users
  */
 module.exports.getAll = asyncWrapper(async (req, res, next) => {
-  const [result, err] = await userRepository.getAll(req.query);
-  if (err) {
-    errJSON = handleError(err);
-    return res
-      .status(errJSON.statusCode)
-      .json({ errors: [{ msg: errJSON.message }] });
-  }
-
+  const result = await userRepository.getAll(req.query);
   res.json(result);
 });
 
@@ -98,6 +79,7 @@ module.exports.delete = asyncWrapper(async (req, res, next) => {
   return res.status(200).json({ data: user });
 });
 
+
 module.exports.upDate = asyncWrapper(async (req, res, next) => {
 
   const [response, err] = userRepository.upDateUser(req.params.id);
@@ -109,3 +91,10 @@ module.exports.upDate = asyncWrapper(async (req, res, next) => {
   }
   return res.status(200).json({ data: response });
 });
+
+
+module.exports.getLoginData = asyncWrapper(async(req,res,next)=>{
+delete req.currentUser.iat;
+delete req.currentUser.exp;
+return res.status(200).json({loginData:req.currentUser})
+})

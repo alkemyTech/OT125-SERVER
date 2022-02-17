@@ -21,14 +21,14 @@ exports.create = async (member, cb) => {
         err.name = 'duplicated_entry';
         err.entity={name:'member',key:'name',keyValue:member.name}
         errJSON = handleError(err)
-        return cb(errJSON)
+        return cb([null,errJSON])
 
       }
-      return cb(result[0]);
+      return cb([result[0],null]);
     })
     .catch((err) => {
       errJSON = handleError(err);
-      return cb(errJSON);
+      return cb([null,errJSON]);
     });
 };
 
@@ -38,8 +38,75 @@ exports.getAll = async()=>{
   return res;
 }
 
-exports.setOne = async()=>{}
+exports.getOne = async(_id)=>{
+  try {
+    const result = await Member.findByPk(_id)
+    if (!result){
+      let err = new Error(`not_found`);
+      err.name = 'not_found';
+      err.entity={name:'Member',key:'id',keyValue:_id};
+      errJSON = handleError(err)
+      return [null,errJSON]
 
-exports.setOne = async () => {}
+    }
+    return [result, null];
 
-exports.delete = async () => {}
+  } catch (e) {
+    errJSON = handleError(e);
+    return [null, errJSON];
+  }
+}
+
+exports.setOne = async (_id, body, cb) => {
+  Member.update(
+    {
+      name: body.name,
+      facebookUrl: body.facebookUrl,
+      instagramUrl: body.instagramUrl,
+      linkedinUrl: body.linkedinUrl,
+      image: body.image,
+      description: body.description
+    }, {
+    where: {
+      id: _id
+    }
+  })
+    .then(result => {
+      if (result == 0) {
+        let err = new Error(`not_found`);
+        err.name = 'not_found';
+        err.entity={name:'Member',key:'id',keyValue:_id};
+        errJSON = handleError(err)
+        return cb([null,errJSON])
+      }
+      return cb([body,null])
+
+    })
+    .catch(err => {
+      errJSON = handleError(err)
+      return cb([null,errJSON])
+    })
+}
+
+exports.delete = async (_id) => {
+  try{
+    [result,err] = await this.getOne(_id)
+    if (err){
+      let err = new Error(`not_found`);
+      err.name = 'not_found';
+      err.entity={name:'Activity',key:'id',keyValue:_id};
+      errJSON = handleError(err)
+      return [null,errJSON]
+    }else{
+      result.destroy().then(deleted => deleted)
+      let response = { statusCode: 202, message: { deleteStatus: `Member with id ${_id} deleted successfully.` } }
+      return [response,null]
+    }
+
+  }catch(err){
+    errJSON = handleError(err);
+    return [null,errJSON]
+
+  }
+
+}

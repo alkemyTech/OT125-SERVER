@@ -1,4 +1,6 @@
 const newsRepository = require('../repositories/newRepositories');
+const {paginate} = require('../utils/pagination')
+const lengthResult = 10;
 
 module.exports = {
   create: async (newToCreate) => {
@@ -13,9 +15,8 @@ module.exports = {
     }
     return oneNew;
   },
-  getAll: async () => {
-    let allNews = await newsRepository.getAll();
-    return allNews;
+  getAll: async (req) => {
+    return await paginate(newsRepository.getAll, req, lengthResult);
   },
   update: async (id, data) => {
     let newAtUpdate = await newsRepository.getOne(id);
@@ -34,5 +35,14 @@ module.exports = {
       error.status = 404;
       throw error;
     }
+  },
+  getComments: async (id) => {
+    const comments = await newsRepository.getComments(id);
+    if (!comments) {
+      const error = new Error(`Not found id: ${id}`);
+      error.name = 'not_found';
+      throw error;
+    }
+    return comments;
   },
 };
