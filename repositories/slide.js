@@ -2,13 +2,15 @@ const db = require('../models/slide')
 const { Slide } = require('../models/index')
 const { handleError: errP } = require('../utils/errorHandler')
 const responseParser = require('../utils/responseFormatter')
+const awsS3Service = require('../services/aws_s3_service');
 
 exports.create = async (body) => {
     try {
       const newSlide = await Slide.create({
-        imageUrl: body.imageUrl,
-        text: body.text
-        
+        imageUrl: await awsS3Service.imageUpload(body.imageUrl, body.name),
+        text: body.text,
+        order:body.order,
+        organizationId:body.organizationId
       });
   
       return responseParser({ statusCode: 201, object: newSlide });
