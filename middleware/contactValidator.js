@@ -1,15 +1,10 @@
-const { body, validationResult } = require('express-validator');
-
+const { body} = require('express-validator');
+const errHandler = require('./errorFilter');
 
 module.exports.contactValidation = [
-    body('name').notEmpty().withMessage('Name cant be empty').isString().withMessage('Must be a String'),
+    body('name').notEmpty().withMessage(`Name can't be empty`).isString().withMessage('Must be a String'),
     body('email').isEmail().normalizeEmail(),
-    (req, res, next) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        } else {
-            next()
-        }
-    }
+    body('message').notEmpty().withMessage(`Message can't be empty`).isString().withMessage('Must be a String'),
+    body('phone').notEmpty().withMessage(`Phone can't be empty`).isInt().withMessage('Only numbers'),
+    errHandler
 ];

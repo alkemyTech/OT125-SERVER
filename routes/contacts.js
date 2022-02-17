@@ -5,7 +5,7 @@ const auth = require('../middleware/authenticate');
 const validation = require('../middleware/contactValidator');
 const isAdmin = require('../middleware/isAdmin');
 
-router.post('/', auth, validation.contactValidation, controller.createContact);
+router.post('/', validation.contactValidation, controller.createContact);
 router.get('/', auth, isAdmin, controller.getContacts);
 
 

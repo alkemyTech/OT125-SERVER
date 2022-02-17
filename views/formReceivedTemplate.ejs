@@ -182,11 +182,12 @@
         <h1
         style="
         text-align: center;
-        font-size: 2rem;"
-        >¡Gracias por comunicarte!</h1>
+        font-size: 1rem;
+        padding:1rem;"
+        ></h1>
 
         <% if(contact)  { %>
-          <h2 style="text-align: center;">Hola <%= contact.name%>!</h4>
+          <h2 style="text-align: center;">¡Hola <%= contact.name%>!</h4>
           <%  }  %>
       
         <img
@@ -205,8 +206,9 @@
         <p style="text-align: center">
           <h3 
           style="
-          font-size: 1.3rem; 
+          font-size: 1rem; 
           text-align: center;
+          padding-bottom:5rem;
           "
           >Recibimos tu mensaje, nos estaremos comunicando a la brevedad con vos.</h3>
         </p>
@@ -225,7 +227,7 @@
           <p style="text-align: center;"><%= org.name%> - Tel. +54<%=org.phone%> - <%=org.address%> </h4>
           <%  }  %>
 
-          <p style="text-align: center">Este mensaje es generado automáticamente. No responder.</p>
+          <p style="text-align: center;">Este mensaje es generado automáticamente. No responder.</p>
         </div> 
       </div>
     </div>

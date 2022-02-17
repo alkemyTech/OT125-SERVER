@@ -36,7 +36,7 @@ module.exports.formReceivedEmail = async (contact) =>{
     }
     try{
         await sgMail.send(msg)
-        console.log('Contact Received Email, sent succesfully')
+        console.log('Received a new ContactForm. Confirmation email was sent. ')
     } 
     catch(e){
         console.log('ErrorMailService:',e.message)
