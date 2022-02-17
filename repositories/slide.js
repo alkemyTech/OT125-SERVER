@@ -17,9 +17,10 @@ exports.create = async (body) => {
     }
   };
 
-exports.findAll = (req, res) => {
-
-};
+  exports.findAll = (req, res) => {
+    const allSlide2 = Slide.findAll({attributes: ['imageUrl', 'text']})
+    return(allSlide2) 
+  };
 
 exports.findId = async function (req) {
      
