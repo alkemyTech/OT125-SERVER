@@ -32,10 +32,16 @@ exports.create = async (member, cb) => {
     });
 };
 
-exports.getAll = async()=>{
-  const res = await Member.findAndCountAll()
-  .then(dbResult => dbResult)
-  return res;
+exports.getAll = async({ limit, offset })=>{
+  try {
+    const attr = ['id', 'name','facebookUrl','instagramUrl','linkedinUrl','description'];
+    const result = await Member.findAndCountAll({ attributes: attr, limit, offset })
+    return result
+
+  } catch (e) {
+    errJSON = handleError(e);
+    return errJSON;
+  }
 }
 
 exports.getOne = async(_id)=>{

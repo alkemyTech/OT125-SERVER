@@ -1,6 +1,7 @@
 const { response } = require('express');
 const repository = require('../repositories/members');
 const asyncWrapper = require('../utils/asyncWrapper');
+const service = require('../services/members');
 
 let membersControllers = {
   create: async (req, res) => {
@@ -22,13 +23,13 @@ let membersControllers = {
     });
   },
 
-  //Get all activities
-  findAll: asyncWrapper(async (req, res) => {
-    repository
-      .getAll()
-      .then(result => res.json(result))
-      .catch((err) => res.status(500).json(err));
-  }),
+  findAll: async (req, res) => {
+    service.getMembers(req.query.page).then(({ statusCode, response }) => {
+      res.status(statusCode).json(response)
+  }).catch(err => {
+      res.status(500).json({ error: err })
+  })
+  },
 
   findOne:async(req, res)=>{
     [result,err] = await repository.getOne(req.params.id)
