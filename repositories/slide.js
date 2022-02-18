@@ -20,7 +20,7 @@ exports.create = async (body) => {
   };
 
   exports.findAll = (req, res) => {
-    const allSlide2 = Slide.findAll({attributes: ['imageUrl', 'text']})
+    const allSlide2 = Slide.findAll({attributes: ['imageUrl', 'order']})
     return(allSlide2) 
   };
 
@@ -47,9 +47,35 @@ exports.findId = async function (req) {
   },
     
 
-exports.update = (req, res) => {
+exports.update = async  (req, body) => {
+     
+  try {
+    let SlideOne2 = await Slide.findOne({
+      where: {
+        id: req
+      }
+    })
 
-};
+    if (!SlideOne2) {
+      const err = new Error()
+      err.name = 'not_found';
+      err.entity = { name: 'slide', key: 'id', keyValue: req }
+      return responseParser({ error: errP(err) })
+    } else {
+      const update = await SlideOne2.update({
+        imageUrl: body.imageUrl,
+        text: body.text,
+        order: body.order,
+        organizationId: body.organizationId
+
+      });
+      await update.save();
+      return responseParser({ statusCode: 200, object: { message: 'Slide edited' } })
+    }
+  } catch (error) {
+    return responseParser({ error: errP(error) })
+  }
+}
 
 exports.destroy = (req, res) => {
 
