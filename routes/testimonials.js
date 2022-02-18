@@ -3,7 +3,7 @@ const router = express.Router();
 const testimonialsControllers = require('../controllers/testimonials');
 const auth = require('../middleware/authenticate');
 const isAdmin = require('../middleware/isAdmin');
-const {createValidation,updateValidation} = require('../Middleware/testimonialValidation');
+const {createValidation,updateValidation} = require('../middleware/testimonialValidation');
 
 
 router.get('/',testimonialsControllers.findAll);
