@@ -422,6 +422,57 @@ paths:
      
        
  
+  /Slides:
+    post:
+        summary: Creates a new slide
+        tags:
+          - Slides
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlideObject'
+          required: true
+        responses:
+          '201':
+            $ref: '#/components/responses/SlideResponse'
+          '400':
+            $ref: '#/components/responses/ValidationErrors'
+          '401':
+            description: Token missing in header.
+          '403':
+            description: Insufficient permissions. 
+          '409':
+            description: Slide name already exists on database.
+        security:
+          - BearerAuth: []        
+  /Slides/{id}:
+    get:
+      summary: Get a specific slide.
+      
+      parameters:
+         - in: path
+           name: id
+           schema:
+            type: integer
+           required: true
+      tags:
+      - Slides
+      description: 'Get a slide by id'
+      responses:
+        '200':
+            $ref: '#/components/responses/SlideResponse'
+        '400':
+            $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          $ref: '#/components/responses/EntityNotFound'
+      security:
+        - BearerAuth: []
+
 
 
 components:
@@ -609,7 +660,17 @@ components:
        updatedAt: 
         type: string
         example: "2022-02-03T04:09:51.592Z" 
-    
+    SlideObject:
+       type: object
+       required:
+        - name
+       properties:
+        imageUrl: 
+         type: string
+         example: image-B64 1
+        text: 
+         type: string
+         example: description 1
         
      
   responses:
@@ -763,6 +824,15 @@ components:
               error: 
                 type: string
                 example: Entity with id X doesn't exists.
+    SlideResponse:
+      description: A json data response for slide
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: 
+                $ref: '#/components/schemas/SlideObject'            
 
 
   securitySchemes:
