@@ -10,7 +10,7 @@ router.get('/',testimonialsControllers.findAll);
 
 router.use(auth, isAdmin);
 
-router.post('/',testimonialsControllers.create);
+router.post('/',createValidation,testimonialsControllers.create);
 
 router.put('/:id',updateValidation,testimonialsControllers.update);
 

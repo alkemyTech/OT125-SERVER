@@ -3,6 +3,11 @@ const { handleError: errP } = require('../utils/errorHandler');
 const responseParser = require('../utils/responseFormatter');
 
 
+module.exports.findAll = async () =>{
+  const attr =['id','name','image','content']
+  const res = await Testimonial.findAll({attributes:attr})
+  return responseParser({statusCode:200,object:res})
+}
 
 module.exports.createTestimonial = async (body) => {
   try {
