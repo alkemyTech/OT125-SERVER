@@ -14,8 +14,8 @@ let slidesController={
     },
 
     findAll: async function(req, res) {
-      const allSlide = await repo.findAll();
-      res.send(allSlide)
+      const {response,statusCode} = await repo.findAll();
+      res.json(response).status(statusCode)
     },
 
     findId: async function (req, res)  {
