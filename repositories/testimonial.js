@@ -3,6 +3,11 @@ const { handleError: errP } = require('../utils/errorHandler');
 const responseParser = require('../utils/responseFormatter');
 
 
+module.exports.findAll = async () =>{
+  const attr =['id','name','image','content']
+  const res = await Testimonial.findAll({attributes:attr})
+  return responseParser({statusCode:200,object:res})
+}
 
 module.exports.createTestimonial = async (body) => {
   try {
@@ -27,7 +32,7 @@ module.exports.updateTestimonial = async (id, body) => {
     })
 
     if (!testimonialFound) {
-      return responseParser({ error: errP({ name: 'not_found', entity: { name: 'Testimonial', key: 'ID', keyvalue: id } }) })
+      return responseParser({ error: errP({ name: 'not_found', entity: { name: 'Testimonial', key: 'id', keyValue: id } }) })
     } else {
       const update = await testimonialFound.update({
         name: body.name,
