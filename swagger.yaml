@@ -342,6 +342,32 @@ paths:
         '500':
           $ref: '#/components/responses/GenericError'
   
+  /testimonials:
+  
+    post:
+       summary: Create a new testimonial
+       tags:
+        - Testimonials
+       requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestimonialObject'
+        required: true
+       responses:
+        '201':
+          $ref: '#/components/responses/TestimonialResponse'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions. 
+        
+       security:
+        - BearerAuth: []  
+  
+  
   /testimonials/{id}:
     put:
        summary: Update an existing testimonial
@@ -419,7 +445,84 @@ paths:
           description: Member name already exists on database.
        security:
         - BearerAuth: []  
-     
+
+  /members/{id}:
+    get:
+      summary: Get a specific member.
+      parameters:
+         - in: path
+           name: id
+           schema:
+            type: integer
+           required: true
+      tags:
+      - Members
+      description: 'Get a member by id'
+      responses:
+        '200':
+            $ref: '#/components/responses/MemberResponse'
+        '400':
+            $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          $ref: '#/components/responses/EntityNotFound'
+      security:
+        - BearerAuth: []
+    put:
+       summary: Update an existing member
+       tags:
+        - Members
+       parameters:
+         - in: path
+           name: id
+           schema:
+            type: integer
+           required: true
+       requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberObject'
+        required: true
+       responses:
+        '200':
+          $ref: '#/components/responses/MemberResponse'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+       security:
+        - BearerAuth: []
+    delete: 
+      summary: Delete a specific member
+      parameters:
+         - in: path
+           name: id
+           schema:
+            type: integer
+           required: true
+      tags:
+      - Members
+      responses:
+       '202':
+         $ref: '#/components/responses/MemberDeleted'
+       '400':
+          $ref: '#/components/responses/ValidationErrors'
+       '401':
+          description: Token missing in header.
+       '403':
+          description: Insufficient permissions.
+       '404':
+          $ref: '#/components/responses/EntityNotFound'
+      security:
+        - BearerAuth: []
+  
+
        
  
   /Slides:
@@ -811,6 +914,19 @@ components:
             properties:
               data: 
                 $ref: '#/components/schemas/Member'
+    MemberDeleted:
+      description: Success deleted message
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: 
+                type: object
+                properties:
+                  deleteStatus:
+                     type: string
+                     example: Member with id 17 deleted successfully.
     
      
 

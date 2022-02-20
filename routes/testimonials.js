@@ -8,6 +8,7 @@ const {createValidation,updateValidation} = require('../middleware/testimonialVa
 
 router.get('/',testimonialsControllers.findAll);
 
+
 router.use(auth, isAdmin);
 
 router.post('/',createValidation,testimonialsControllers.create);
