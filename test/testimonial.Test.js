@@ -4,6 +4,55 @@ const app = require('../app');
 var request = require('supertest')(app);
 const admCredentials = { email: "test1@test.com", password: '1234' }
 
+describe('#GET /testimonials', async function () {
+  const test = {
+    expectedStatus: 200
+  };
+
+  let jwtToken;
+  before((done) => {
+    request
+      .post('/auth/login')
+      .send(admCredentials)
+      .end((err, res) => {
+        if (err) done(err);
+        jwtToken = res.body.token;
+        done()
+      })
+  })
+  it('should get a list of  testimonial successfully',  function (done) {
+   request
+      .get('/testimonials')
+      .query({ page: 1 })
+      .set('Authorization', 'Bearer ' + jwtToken)
+      .expect(test.expectedStatus,done)
+  });
+
+  
+   //Testing Error handler 
+  const testError = {
+    
+    expected: {
+      errors: [
+        {
+          "msg": "Testimonial with page 22 doesn't exists."
+        }
+      ]
+    },
+    _page: 22,
+    expectedStatus: 404,
+    description: 'if the Page of testimonial does not exist  returns an  error message'
+  };
+  it(testError.description, function (done) {
+    request
+      .get(`/testimonials/${testError._id}`)
+      .query({ page: 22 })
+      .set('Authorization', 'Bearer ' + jwtToken)
+      .send(testError.body)
+      .expect(testError.expectedStatus, done)
+  });
+}); 
+
 
 
 describe('#POST /testimonials', async function () {
