@@ -263,6 +263,20 @@ paths:
 
 
   /activities:
+    get:
+      description: 'Get all activities'
+      summary: Get all activities
+      tags:
+        - Activities
+      responses:
+        '200':
+          $ref: '#/components/responses/ActivityResponse'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '403':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
     post:
       summary: Creates a new Activity
       tags:
@@ -299,6 +313,30 @@ paths:
           $ref: '#/components/responses/GenericError'
 
   /activities/{id}:
+    get:
+      description: 'Get a specific activity'
+      summary: Get a specific activity
+      tags:
+        - Activities
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Activity ID.
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          $ref: '#/components/responses/ActivityUpdated'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '403':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
+  
     put:
       summary: Updates an existing activity
       tags:
@@ -336,6 +374,29 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ActivityUpdated'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '403':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
+    delete:
+      description: 'Delete a specific activity'
+      summary: Delete a specific activity
+      tags:
+        - Activities
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Activity ID.
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          $ref: '#/components/responses/ActivityDeleted'
         '400':
           $ref: '#/components/responses/ValidationErrors'
         '403':
@@ -616,7 +677,19 @@ components:
             properties:
               data: 
                 $ref: '#/components/schemas/ActivityObject'
-
+    ActivityDeleted:
+      description: Success deleted message
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: 
+                type: object
+                properties:
+                  deleteStatus:
+                     type: string
+                     example: Activity with id 17 deleted successfully.
 
   securitySchemes:
     BearerAuth:
