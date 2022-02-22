@@ -13,9 +13,10 @@ let slidesController={
       }
     },
 
-    findAll:function(req, res, next) {
-        res.send('SlidesfindAll, not implemented yet')
-      },
+    findAll: async function(req, res) {
+      const {response,statusCode} = await repo.findAll();
+      res.json(response).status(statusCode)
+    },
 
     findId: async function (req, res)  {
      
@@ -24,9 +25,13 @@ let slidesController={
       
     },
 
-    update:function(req, res, next) {
-        res.send('Slidesupdate, not implemented yet')
-      },
+    update: async function (req, res)  {
+     
+      const oneSlide = await repo.update(req.params.id, req.body);
+      res.send(oneSlide)  
+      
+    },
+
     destroy:function(req, res, next) {
         res.send('Slidesdestroy, not implemented yet')
       }

@@ -1,5 +1,6 @@
-const { Organization } = require('../models/index');
+const { Organization,Slide, sequelize} = require('../models/index');
 const responseParser = require('../utils/responseFormatter');
+
 
 module.exports.getOneOrg = async () => {
     try {
@@ -7,6 +8,9 @@ module.exports.getOneOrg = async () => {
             where: {
                 id: 1
             },
+            order:[
+                [Slide,'order','ASC']
+            ],
             attributes: [
                 'name',
                 'image',
@@ -14,7 +18,11 @@ module.exports.getOneOrg = async () => {
                 'address',
                 'url_facebook',
                 'url_linkedin',
-                'url_instagram']
+                'url_instagram'],
+            include:{
+                model:Slide,
+                attributes:['id','imageUrl','text','order']               
+            },
         });
 
         if (!orgFound) {

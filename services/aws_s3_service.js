@@ -9,7 +9,7 @@ const { PUBLIC_KEY, SECRET_KEY, BUCKET_NAME } = process.env
  */
 const imageUpload = async (base64, fileName) => {
   AWS.config.setPromisesDependency(require('bluebird'));
-  AWS.config.update({ accesKeyId: PUBLIC_KEY, secretAccessKey: SECRET_KEY });
+  AWS.config.update({ accessKeyId: PUBLIC_KEY, secretAccessKey: SECRET_KEY });
 
   const s3 = new AWS.S3();
   const base64Data = new Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
