@@ -33,7 +33,7 @@ const idParam = param('id')
   .custom(function (value) {
     return db.New.findOne({ where: { id: value } }).then((result) => {
       if (!result) {
-        return Promise.reject(`Nonexistent id: ${value}`);
+        return Promise.reject(`Entity with id:${value} doesn't exists`);
       }
     });
   });

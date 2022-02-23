@@ -519,6 +519,161 @@ paths:
         '500':
           $ref: '#/components/responses/GenericError'
 
+  /news:
+    get:
+      summary: Get a News paginated list.
+      tags:
+      - News
+      description: 'Get a list of news'
+      parameters:
+      - name: page
+        in: query
+        description: 'Optional pagination'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        '200':
+            $ref: '#/components/responses/NewPaginated'
+        '400':
+            $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions. 
+      security:
+        - BearerAuth: []
+    post:
+       summary: Creates a new Novelty
+       tags:
+        - News
+       requestBody:
+        description: body
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: novently test
+                content:
+                  type: string
+                  example: Demo content
+                image:
+                  type: string
+                  example: https://360luminous.com/wp-content/uploads/2020/06/news2.jpg
+                categoryId:
+                  type: integer
+              required:
+                - email
+                - content
+                - image
+                - categoryId
+       responses:
+        '201':
+          $ref: '#/components/responses/NewsResponse'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions. 
+        '409':
+          description: Novently name already exists on database.
+       security:
+        - BearerAuth: []
+  /news/{id}:
+    get:
+      summary: Get a specific new.
+      parameters:
+         - name: id
+           in: path
+           schema:
+            type: integer
+           required: true
+      tags:
+      - News
+      description: 'Get a novently by id'
+      responses:
+        '200':
+            $ref: '#/components/responses/NewsResponse'
+        '400':
+            $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          $ref: '#/components/responses/EntityNotFound'
+      security:
+        - BearerAuth: []
+    put:
+       summary: Update a novently
+       tags:
+        - News
+       parameters:
+         - in: path
+           name: id
+           schema:
+            type: integer
+           required: true
+       requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: newName
+                content:
+                  type: string
+                  example: new content
+                image:
+                  type: string
+                  example: https://360luminous.com/wp-content/uploads/2020/06/news2.jpg
+                categoryId: 
+                  type: integer
+                  example: 1
+        required: true
+       responses:
+        '200':
+          $ref: '#/components/responses/NewsResponse'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+       security:
+        - BearerAuth: []
+    delete: 
+      summary: Delete a specific novently
+      parameters:
+         - in: path
+           name: id
+           schema:
+            type: integer
+           required: true
+      tags:
+      - News
+      responses:
+       '202':
+         $ref: '#/components/responses/NewDeleted'
+       '400':
+          $ref: '#/components/responses/ValidationErrors'
+       '401':
+          description: Token missing in header.
+       '403':
+          description: Insufficient permissions.
+       '404':
+          $ref: '#/components/responses/EntityNotFound'
+      security:
+        - BearerAuth: []
 
 
 components:
@@ -726,8 +881,86 @@ components:
         name: 
          type: string
          example: LOGO-SOMOS-MAS4
-        
-     
+    
+    NewObject:
+       type: object
+       required:
+        - name
+       properties:
+        name: 
+         type: string
+         example: novently 1
+        image: 
+         type: string
+         example: https://360luminous.com/wp-content/uploads/2020/06/news2.jpg
+        description:
+         type: string
+         example: Sample description of Novently
+    News:
+     type: object
+     properties:
+       id: 
+        type: integer
+        example: 1
+       name: 
+        type: string
+        example: Novently 1
+       content: 
+        type: string
+        example: content example
+       image: 
+        type: string
+        example: https://360luminous.com/wp-content/uploads/2020/06/news2.jpg
+       categoryID: 
+        type: integer
+        example: 1
+       description:
+        type: string
+        example: Sample description of New
+       createdAt: 
+        type: string
+        example: "2022-02-03T04:09:51.592Z"
+       updatedAt: 
+        type: string
+        example: "2022-02-03T04:09:51.592Z"
+    NewsSimplifiedDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Novently 1
+        content: 
+          type: string
+          example: content example
+        image: 
+          type: string
+          example: https://360luminous.com/wp-content/uploads/2020/06/news2.jpg
+    NewsPaginatedDTO: 
+      type: object
+      properties:
+        pagesUrl:
+          type: object
+          properties:
+            previous:
+              type: string
+              example: http://localhost:3000/news/?page=1
+            next:
+              type: string
+              example: http://localhost:3000/news/?page=3
+        itemsCount:
+          type: integer
+          example: 20
+        totalPAges: 
+          type: integer
+          example: 5
+        data:
+          type: array
+          items:
+          $ref: "#/components/schemas/NewsSimplifiedDTO"
+
   responses:
     JWT:
       description: token
@@ -867,6 +1100,35 @@ components:
               data: 
                 $ref: '#/components/schemas/Member'
     
+    NewsResponse:
+      description: A json data response for novently
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: 
+                $ref: '#/components/schemas/News'
+    NewPaginated:
+     description: response of paginated news with only id and name.
+     content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NewsPaginatedDTO'
+
+    NewDeleted: 
+      description: Success deleted message
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: 
+                type: object
+                properties:
+                  deleteStatus:
+                     type: string
+                     example: Novently 11 removed successfully
      
 
     EntityNotFound:
