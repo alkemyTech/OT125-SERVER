@@ -22,7 +22,7 @@ exports.create = async (body) => {
 exports.findAll = async () => {
   try {
     const allSlide2 = await Slide.findAll({ attributes: ['imageUrl', 'order'] })
-    return responseParser({statusCode:200,object:allSlide2})
+    return responseParser({ statusCode: 200, object: allSlide2 })
   } catch (err) {
     return responseParser({ error: errP(err) });
   }
@@ -82,6 +82,25 @@ exports.findId = async function (req) {
     }
   }
 
-exports.destroy = (req, res) => {
+exports.destroy = async (req) => {
+  try {
+    const slideFound = await Slide.findOne({
+      where: {
+        id: req
+      }
+    })
+
+    if (!slideFound) {
+      const err = new Error()
+      err.name = 'not_found';
+      err.entity = { name: 'slide', key: 'id', keyValue: req }
+      return responseParser({ error: errP(err) })
+    } else {
+      await slideFound.destroy();
+      return responseParser({ statusCode: 200, object: { message: "Slide deleted!" } })
+    }
+  } catch (error) {
+    return responseParser({ error: errP(error) })
+  }
 
 };
