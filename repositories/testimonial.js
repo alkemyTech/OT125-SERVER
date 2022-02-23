@@ -1,6 +1,8 @@
+const db = require('../models/index');
 const { Testimonial } = require('../models/index');
 const { handleError: errP } = require('../utils/errorHandler');
 const responseParser = require('../utils/responseFormatter');
+
 
 
 
@@ -18,6 +20,14 @@ module.exports.createTestimonial = async (body) => {
   }
 };
 
+module.exports.getTestimonials = async ({ limit, offset }) => {
+
+  const attr = ['id', 'name']
+  const res = await Testimonial.findAndCountAll({ attributes: attr, limit, offset })
+      .then(dbResult => dbResult)
+  return res;
+}
+
 module.exports.updateTestimonial = async (id, body) => {
   try {
     let testimonialFound = await Testimonial.findOne({
@@ -27,7 +37,7 @@ module.exports.updateTestimonial = async (id, body) => {
     })
 
     if (!testimonialFound) {
-      return responseParser({ error: errP({ name: 'not_found', entity: { name: 'Testimonial', key: 'ID', keyvalue: id } }) })
+      return responseParser({ error: errP({ name: 'not_found', entity: { name: 'Testimonial', key: 'id', keyValue: id } }) })
     } else {
       const update = await testimonialFound.update({
         name: body.name,

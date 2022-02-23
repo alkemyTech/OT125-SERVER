@@ -17,20 +17,19 @@ exports.create = async (activity, cb) => {
       if (!result[1]) {
         let err = new Error(`Activity already exists`);
         err.name = 'duplicated_entry';
-        err.entity=result[0];
+        err.entity={name:'Activity',key:'name',keyValue:activity.name};
         errJSON = handleError(err)
-        return cb(errJSON)
+        return cb([null,errJSON])
 
       }
-      return cb(result[0])
+      return cb([result[0],null])
 
     }).catch(err => {
       errJSON = handleError(err)
-      return cb(errJSON)
+      return cb([null,errJSON])
     })
 
 }
-
 
 exports.setOne = async (_id, body, cb) => {
   activities.update(
@@ -47,16 +46,69 @@ exports.setOne = async (_id, body, cb) => {
       if (result == 0) {
         let err = new Error(`Activity not found`);
         err.name = 'not_found';
-        err.entity=body;
+        err.entity={name:'Activity',key:'Activity',keyValue:activities.name};
         errJSON = handleError(err)
-        return cb(errJSON)
+        return cb([null,errJSON])
       }
-      return cb(body)
+      return cb([body,null])
 
     })
     .catch(err => {
       errJSON = handleError(err)
-      return cb(errJSON)
+      return cb([null,errJSON])
     })
+
+}
+
+exports.getAll = async ()=>{
+  try {
+    const result = await activities.findAll()
+    return [result, null];
+
+  } catch (e) {
+    errJSON = handleError(e);
+    return [null, errJSON];
+  }
+}
+
+exports.getOne = async (_id)=>{
+  try {
+    const result = await activities.findByPk(_id)
+    if (!result){
+      let err = new Error(`not_found`);
+      err.name = 'not_found';
+      err.entity={name:'Activity',key:'id',keyValue:_id};
+      errJSON = handleError(err)
+      return [null,errJSON]
+
+    }
+    return [result, null];
+
+  } catch (e) {
+    errJSON = handleError(e);
+    return [null, errJSON];
+  }
+}
+
+exports.delete = async (_id)=>{
+  try{
+    [result,err] = await this.getOne(_id)
+    if (err){
+      let err = new Error(`not_found`);
+      err.name = 'not_found';
+      err.entity={name:'Activity',key:'id',keyValue:_id};
+      errJSON = handleError(err)
+      return [null,errJSON]
+    }else{
+      result.destroy().then(deleted => deleted)
+      let response = { statusCode: 202, message: { deleteStatus: `Member with id ${_id} deleted successfully.` } }
+      return [response,null]
+    }
+
+  }catch(err){
+    errJSON = handleError(err);
+    return [null,errJSON]
+
+  }
 
 }

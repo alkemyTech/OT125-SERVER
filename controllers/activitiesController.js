@@ -3,48 +3,61 @@ const asyncWrapper = require('../utils/asyncWrapper');
 
 
 // Create
-exports.create = asyncWrapper(async (req, res, next) => {
+exports.create = async (req, res) => {
   const body = { name: req.body.name, content: req.body.content, image: req.body.image }
 
   await repository.create(body, cb => {
-    if (cb.message) {
+    if (cb[1]) {
       res
-        .status(errJSON.statusCode)
-        .json({ errors: [{ msg: errJSON.message }] });
+        .status(cb[1].statusCode).json(cb[1]);
     } else {
-      res.status(201).json(cb)
+      res.status(201).json(cb[0])
     }
   })
 
-});
-
-//Get all activities
-exports.findAll = (req, res) => {
-
 };
 
+//Get all activities
+exports.findAll = async (req, res) => {
+  [result, err] = await repository.getAll()
+  if (err) {
+    return res.status(err.statusCode).json(err);
+  } else {
+    res.status(200).json(result)
+  }
+}
+
 // Find one by ID
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
+  [result, err] = await repository.getOne(req.params.id)
+  if (err) {
+    return res.status(err.statusCode).json(err);
+  } else {
+    res.status(200).json(result)
+  }
 
 };
 
 // Update
-exports.update = asyncWrapper(async (req, res, next) => {
+exports.update = asyncWrapper(async (req, res,next) => {
   const _id = req.params.id;
   const body = { name: req.body.name, content: req.body.content, image: req.body.image }
   await repository.setOne(_id, body, cb => {
-    if (cb.message) {
-      res
-        .status(errJSON.statusCode)
-        .json({ errors: [{ msg: errJSON.message }] });
+    [result,err] = cb 
+    if (err) {
+      res.status(err.statusCode).json(err);
     } else {
-      res.json(cb)
+      res.json(result);
     }
   })
 
-});
+})
 
 // Delete
-exports.delete = (req, res) => {
-
-};
+exports.delete = async (req, res) => {
+  [result, err] = await repository.delete(req.params.id);
+  if (err) {
+    res.status(err.statusCode).json(err)
+  }
+  res.status(result.statusCode).json(result)
+}
