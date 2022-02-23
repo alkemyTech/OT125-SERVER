@@ -3,7 +3,7 @@ const asyncWrapper = require('../utils/asyncWrapper');
 
 
 // Create
-exports.create = async (req, res, next) => {
+exports.create = async (req, res) => {
   const body = { name: req.body.name, content: req.body.content, image: req.body.image }
 
   await repository.create(body, cb => {
@@ -39,18 +39,19 @@ exports.findOne = async (req, res) => {
 };
 
 // Update
-exports.update = async (req, res, next) => {
+exports.update = asyncWrapper(async (req, res,next) => {
   const _id = req.params.id;
   const body = { name: req.body.name, content: req.body.content, image: req.body.image }
   await repository.setOne(_id, body, cb => {
-    if (cb[1]) {
-      res.status(cb[1].statusCode).json(cb[1]);
+    [result,err] = cb 
+    if (err) {
+      res.status(err.statusCode).json(err);
     } else {
-      res.json(cb[0]);
+      res.json(result);
     }
   })
 
-};
+})
 
 // Delete
 exports.delete = async (req, res) => {
