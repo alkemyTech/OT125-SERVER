@@ -1,0 +1,26 @@
+version: '3'
+services:
+  mysql-srv:
+    image: 'mysql:8'
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=ong
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_TCP_PORT=4000
+    # to add: volume to persit data -container rebuild? adieu data-
+    ports:
+      - '4000:4000'
+    container_name: ot125-mysql
+
+  api-srv:
+    restart: on-failure
+    env_file:
+      - ./docker.env
+    build: ./
+    volumes:
+      - /app/node_modules
+      - ./:/usr/src/app
+    ports:
+      - '3000:3000'
+    command: sh -c '/wait-for mysql-srv:4000 -- npm run dev'
+    container_name: ot125-server
