@@ -3,8 +3,16 @@ const errHandler = require('./errorFilter');
 
 module.exports={
     createValidation :[
-        body('name').notEmpty().withMessage('name is required field').isString().withMessage('name must be a string'),
-        body('content').notEmpty().withMessage('content is required field').isString().withMessage('content must be a string'),
+        body('name')
+         .notEmpty()
+         .withMessage('name is a required field')
+         .isString()
+         .withMessage('name must be a string'),
+        body('content')
+         .notEmpty()
+         .withMessage('content is required field')
+         .isString()
+         .withMessage('content must be a string'),
         errHandler
     ],
 

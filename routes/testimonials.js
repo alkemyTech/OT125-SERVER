@@ -6,7 +6,8 @@ const isAdmin = require('../middleware/isAdmin');
 const {createValidation,updateValidation} = require('../middleware/testimonialValidation');
 
 
-router.get('/',testimonialsControllers.findAll);
+router.get('/',testimonialsControllers.getTestimonials);
+
 
 router.use(auth, isAdmin);
 

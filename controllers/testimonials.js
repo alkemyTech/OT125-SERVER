@@ -1,4 +1,5 @@
 const repo = require('../repositories/testimonial');
+const service = require('../services/testimonials')
 
 const testimonialsController = {
 
@@ -11,14 +12,12 @@ const testimonialsController = {
     }
   },
 
-  findAll: async function (req, res, next) {
-    try {
-      const data = await repo.findAll();
-      res.json(data.response).status(data.statusCode)
-    } catch (err) {
-      res.json({msg:err}).status(500)
-    }
-
+  getTestimonials: (req, res) => {
+    service.getTestimonials(req.query.page).then(({ statusCode, response }) => {
+        res.status(statusCode).json(response)
+    }).catch(err => {
+        res.status(500).json({ error: err })
+    })
   },
 
   update: async function (req, res, next) {
