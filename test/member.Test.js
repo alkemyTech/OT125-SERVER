@@ -30,23 +30,24 @@ describe('#GET /members', async function () {
   });
 
   
+  
    //Testing Error handler 
-  const testError = {
+   const testError = {
     
     expected: {
       errors: [
         {
-          "msg": "Testimonial with page 22 doesn't exist."
+          "msg": "Member with page 22 doesn't exist."
         }
       ]
     },
     _page: 22,
     expectedStatus: 404,
-    description: 'if the page of Member does not exist  returns an  error message'
+    description: 'if the page of member does not exist  returns an  error message'
   };
   it(testError.description, function (done) {
     request
-      .get(`/members/${testError._id}`)
+      .get('/members')
       .query({ page: 22 })
       .set('Authorization', 'Bearer ' + jwtToken)
       .send(testError.body)
@@ -58,7 +59,7 @@ describe('#GET /members', async function () {
  describe('#POST /members', async function () {
   const test = {
     body: {
-      name: "member 6",
+      name: "member ",
       facebookUrl: "https://www.facebook.com/member",
       instagramUrl:"https://www.instagram.com/member" ,
       linkedinUrl: "https://www.linkedIn.com/member",
