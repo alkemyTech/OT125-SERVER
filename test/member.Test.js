@@ -59,7 +59,7 @@ describe('#GET /members', async function () {
  describe('#POST /members', async function () {
   const test = {
     body: {
-      name: "member ",
+      name: "Member 6",
       facebookUrl: "https://www.facebook.com/member",
       instagramUrl:"https://www.instagram.com/member" ,
       linkedinUrl: "https://www.linkedIn.com/member",
@@ -68,7 +68,7 @@ describe('#GET /members', async function () {
     },
     expected: {
       id: 6,
-      name: "member 6",
+      name: "Member 6",
       facebookUrl: "https://www.facebook.com/member",
       instagramUrl:"https://www.instagram.com/member" ,
       linkedinUrl: "https://www.linkedIn.com/member",
@@ -101,7 +101,7 @@ describe('#GET /members', async function () {
   //Testing error handler
    const testError = {
     body: {
-      name: 'Member 1',
+      name: 'Member 1 ',
       facebookUrl: "https://www.facebook.com/member",
       instagramUrl:"https://www.instagram.com/member" ,
       linkedinUrl: "https://www.linkedIn.com/member",
