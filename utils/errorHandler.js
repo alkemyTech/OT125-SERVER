@@ -57,7 +57,7 @@ module.exports.handleError = (error) => {
       errResult = {
         message: `${entity?.name || 'Document'} with ${entity?.key || ''} ${
           entity?.keyValue || ''
-        } doesn't exists.`,
+        } doesn't exist.`,
         statusCode: 404,
       };
       if (entity?.name === 'User') {

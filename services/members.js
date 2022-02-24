@@ -1,4 +1,6 @@
-const repo = require('../repositories/members')
+const repo = require('../repositories/members');
+const { handleError: errP } = require('../utils/errorHandler');
+const responseParser = require('../utils/responseFormatter');
 
 const getPagination = (page) => {
     const limit = 10
@@ -16,9 +18,15 @@ const getPagingData = (data, page, limit) => {
     let metadata = {finalPage}
     if(previousPage) metadata.previousPage = url+previousPage;
     if(nextPage) metadata.nextPage = url+nextPage
-    return { statusCode:200, response:{ members, metadata} };
+    if(members.length > 0 || currentPage == 1)
+    {
+        return { statusCode:200, response:{ members, metadata} };
+    }
    
+    return responseParser({ error: errP({name:'not_found', entity:{name:'Members', key:'page',keyValue:page}}) });
 };
+
+   
 
 const getMembers = async (page) =>{
     const filter = getPagination(page)

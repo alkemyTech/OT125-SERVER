@@ -6,7 +6,7 @@ const membersControllers = require('../controllers/members');
 const auth = require('../middleware/authenticate');
 const isAdmin = require('../middleware/isAdmin');
 
-router.use(auth,isAdmin);
+//router.use(auth,isAdmin);
 
 router.get('/',membersControllers.findAll);
 router.get('/:id', validator.validateId,membersControllers.findOne);
