@@ -168,7 +168,7 @@ describe('Login users', async () => {
       expectedBody: {
         errors: [
           {
-            msg: `User with email not@registered.com doesn't exists.`,
+            msg: `User with email not@registered.com doesn't exist.`,
           },
         ],
       },
