@@ -15,7 +15,7 @@ const newsRouter = require('./routes/news');
 const testimonialsRouter = require('./routes/testimonials');
 const orgRouter = require('./routes/organization');
 const slidesRouter = require('./routes/slides');
-const membersRouter=require('./routes/members');
+const membersRouter = require('./routes/members');
 const ActivitiesRouter = require('./routes/activities');
 const commentRouter = require('./routes/comment');
 const contactRouter = require('./routes/contacts');
@@ -45,6 +45,13 @@ app.use('/members', membersRouter);
 app.use('/activities', ActivitiesRouter);
 app.use('/comments', commentRouter);
 app.use('/contacts', contactRouter);
+
+//Swagger docs
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerFile = YAML.load('./swagger.yaml');
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
