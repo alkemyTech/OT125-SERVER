@@ -230,7 +230,29 @@ paths:
           description: Insufficient permissions.
         '404':
           $ref: '#/components/responses/EntityNotFound'
-
+   post:
+      summary: Updates organization public data
+      tags:
+        - Organization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUpdate'
+        required: true
+      responses:
+        '201':
+          $ref: '#/components/responses/OrganizationResponse'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+        '409':
+          description: Category name already exists on database.
+      security:
+        - BearerAuth: []
 
   /users:
     get:
@@ -1282,7 +1304,36 @@ components:
               type: array
               items:
                $ref: '#/components/schemas/SlideResponseObject'
-
+    OrganizationUpdate: 
+      type: object 
+      properties:      
+             name:
+              type: string
+              example: Somos Más
+             phone:
+              type: integer
+              example: 1160112988
+             welcomeText:
+              type: string
+              example: welcome 
+             aboutUsText:
+              type: string 
+              example: about
+             address:
+              type: string
+              example: Av. Velez Sarsfield 1234
+             url_facebook:
+              type: string
+              example: https://www.facebook.com/somosmas
+             url_linkedin:
+              type: string
+              example: https://linkedin.com/somosmas
+             url_instagram:
+              type: string
+              example: https://linkedin.com/somosmas
+             image:
+              type: string
+              example: https://i.imgur.com/example-activity.jpg           
         
      
 
