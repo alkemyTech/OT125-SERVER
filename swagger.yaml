@@ -902,6 +902,61 @@ paths:
       security:
         - BearerAuth: []
 
+
+  /contacts:
+   get:
+      summary: Get a list of contacts.
+      tags:
+        - Contacts
+      description: 'Get a list of contacts'
+      responses:
+        '200':
+          description: List of contacts.
+          content:
+             application/json:
+               schema:               
+                type: object
+                properties:
+                 data:
+                  type: array
+                  items:
+                   $ref: '#/components/schemas/ContactForm'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+      security:
+        - BearerAuth: []
+   post:
+      summary: Create new register of contact.
+      tags:
+        - Contacts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactForm'
+        required: true
+      responses:
+        '201':
+           description: Contact created
+           content:
+               application/json:             
+                schema:                           
+                 type: object
+                 properties:
+                  data:
+                   $ref: '#/components/schemas/ContactForm'  
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.   
+
+
 components:
   schemas:
     User:
@@ -1210,7 +1265,7 @@ components:
           example: https://360luminous.com/wp-content/uploads/2020/06/news2.jpg
         description:
           type: string
-          example: Sample description of Novently
+          example: Sample description of News article
     News:
       type: object
       properties:
@@ -1334,8 +1389,26 @@ components:
              image:
               type: string
               example: https://i.imgur.com/example-activity.jpg           
-        
-     
+    ContactForm: 
+      type: object
+      required:
+        - name
+        - email
+        - message
+        - phone
+      properties:
+        name:
+          type: string
+          example: John Matt
+        email:
+          type: string
+          example: mail@gmail.com
+        message:
+          type: string
+          example: Example
+        phone:
+          type: integer
+          example: 1121356156
 
   responses:
     JWT:
@@ -1602,7 +1675,15 @@ components:
           schema:
             type: object
             $ref: '#/components/schemas/ActivityObject'
-                
+
+    Contacts:
+      description: List of Contacts
+      content:
+        application/json:
+          schema:            
+              type: array
+              items:
+               $ref: '#/components/schemas/ContactForm'  
    
 
   securitySchemes:
