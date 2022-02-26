@@ -59,5 +59,5 @@ exports.delete = async (req, res) => {
   if (err) {
     res.status(err.statusCode).json(err)
   }
-  res.status(result.statusCode).json(result)
+  res.status(result.statusCode).json(result.message)
 }

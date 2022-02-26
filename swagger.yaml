@@ -212,6 +212,25 @@ paths:
       security:
         - BearerAuth: []
 
+  /organization/public:
+   get:
+      summary: Get public data from organization
+      tags:
+        - Organization
+      description: 'Get Organization public data'
+      responses:
+        '200':
+          $ref: '#/components/responses/OrganizationResponse'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          $ref: '#/components/responses/EntityNotFound'
+
+
   /users:
     get:
       summary: Returns a list of users
@@ -259,6 +278,22 @@ paths:
                         example: 2
 
   /activities:
+    get:
+      summary: Get all activities list.
+      tags:
+        - Activities
+      description: 'Get a list of Activities'   
+      responses:
+        '200':
+          $ref: '#/components/responses/ActivitiesList'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+      security:
+        - BearerAuth: []
     post:
       summary: Creates a new Activity
       tags:
@@ -295,6 +330,28 @@ paths:
           $ref: '#/components/responses/GenericError'
 
   /activities/{id}:
+    get:
+      summary: Get specific activity
+      tags:
+        - Activities
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true  
+      description: 'Get specific activity'   
+      responses:
+        '200':
+          $ref: '#/components/responses/Activity'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+      security:
+        - BearerAuth: []
     put:
       summary: Updates an existing activity
       tags:
@@ -338,7 +395,29 @@ paths:
           $ref: '#/components/responses/GenericError'
         '500':
           $ref: '#/components/responses/GenericError'
-
+    delete:
+      summary: Delete a specific activity
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      tags:
+        - Activities
+      responses:
+        '202':
+          $ref: '#/components/responses/ActivityDeleted'
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          $ref: '#/components/responses/EntityNotFound'
+      security:
+        - BearerAuth: []
   /testimonials:
     get:
       summary: Get testimonials paginated list.
@@ -1132,6 +1211,60 @@ components:
           items:
           $ref: '#/components/schemas/NewsSimplifiedDTO'
 
+    Activity:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Activity 1
+        content:
+          type: string
+          example: Demo
+        image:
+          type: string
+          example: https://i.imgur.com/example-activity.jpg
+        createdAt:
+          type: string
+          example: '2022-02-03T04:09:51.592Z'
+        updatedAt:
+          type: string
+          example: '2022-02-03T04:09:51.592Z'
+    
+    Organization: 
+      type: object 
+      properties:      
+             name:
+              type: string
+              example: Somos Más
+             phone:
+              type: integer
+              example: 1160112988
+             address:
+              type: string
+              example: Av. Velez Sarsfield 1234
+             url_facebook:
+              type: string
+              example: https://www.facebook.com/somosmas
+             url_linkedin:
+              type: string
+              example: https://linkedin.com/somosmas
+             url_instagram:
+              type: string
+              example: https://linkedin.com/somosmas
+             image:
+              type: string
+              example: https://i.imgur.com/example-activity.jpg
+             Slides: 
+              type: array
+              items:
+               $ref: '#/components/schemas/SlideResponseObject'
+
+        
+     
+
   responses:
     JWT:
       description: token
@@ -1332,6 +1465,34 @@ components:
                     type: string
                     example: Novently 11 removed successfully
 
+    Activity:
+      description: A json data response for activity
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Activity'
+    ActivitiesList:
+      description: List of Activities
+      content:
+        application/json:
+          schema:            
+              type: array
+              items:
+               $ref: '#/components/schemas/Activity'
+    ActivityDeleted:
+      description: Success deleted message
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              deleteStatus:
+                 type: string
+                 example: Activity with id 11 removed successfully         
+
     EntityNotFound:
       description: Error message when required entity doesn't exists in database.
       content:
@@ -1341,7 +1502,7 @@ components:
             properties:
               error:
                 type: string
-                example: Entity with id X doesn't exists.
+                example: Entity with id X doesn't exist.
     SlideResponse:
       description: A json data response for slide
       content:
@@ -1351,6 +1512,18 @@ components:
             properties:
               data:
                 $ref: '#/components/schemas/SlideResponseObject'
+    
+    OrganizationResponse:
+       description: A public data response for organization
+       content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Organization'
+
+
 
   securitySchemes:
     BearerAuth:
@@ -1361,6 +1534,7 @@ components:
 
 tags:
   - name: Authorization
+  - name: Organization 
   - name: Categories
     description: Categories CRUD
   - name: News

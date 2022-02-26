@@ -101,7 +101,7 @@ exports.delete = async (_id)=>{
       return [null,errJSON]
     }else{
       result.destroy().then(deleted => deleted)
-      let response = { statusCode: 202, message: { deleteStatus: `Member with id ${_id} deleted successfully.` } }
+      let response = { statusCode: 202, message: { deleteStatus: `Activity with id ${_id} deleted successfully.` } }
       return [response,null]
     }
 
