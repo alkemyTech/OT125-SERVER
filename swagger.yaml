@@ -14,7 +14,7 @@ paths:
     post:
       summary: Creates an user and returns an access token
       tags:
-        - authorization
+        - Authorization
       requestBody:
         description: information of the account to be created
         required: true
@@ -60,7 +60,7 @@ paths:
     post:
       summary: Validates credentials and returns access token
       tags:
-        - authorization
+        - Authorization
       requestBody:
         description: credentials to login into account
         required: true
@@ -216,7 +216,7 @@ paths:
     get:
       summary: Returns a list of users
       tags:
-        - users
+        - Users
       parameters:
         - in: query
           name: page
@@ -614,7 +614,7 @@ paths:
         - BearerAuth: []
 
     put:
-      summary: Updates an existing activity
+      summary: Updates an existing slide
       tags:
         - Slides
       parameters:
@@ -645,7 +645,7 @@ paths:
 
   /news:
     get:
-      summary: Get a News paginated list.
+      summary: Get a news paginated list.
       tags:
         - News
       description: 'Get a list of news'
@@ -670,7 +670,7 @@ paths:
       security:
         - BearerAuth: []
     post:
-      summary: Creates a new Novelty
+      summary: Creates a news article.
       tags:
         - News
       requestBody:
@@ -712,7 +712,7 @@ paths:
         - BearerAuth: []
   /news/{id}:
     get:
-      summary: Get a specific new.
+      summary: Get a specific news article.
       parameters:
         - name: id
           in: path
@@ -736,7 +736,7 @@ paths:
       security:
         - BearerAuth: []
     put:
-      summary: Update a novently
+      summary: Update a news article
       tags:
         - News
       parameters:
@@ -766,7 +766,7 @@ paths:
         required: true
       responses:
         '200':
-          $ref: '#/components/responses/NewsResponse'
+          $ref: '#/components/responses/NewsUpdateResponse'
         '400':
           $ref: '#/components/responses/ValidationErrors'
         '401':
@@ -776,7 +776,7 @@ paths:
       security:
         - BearerAuth: []
     delete:
-      summary: Delete a specific novently
+      summary: Delete a specific news article
       parameters:
         - in: path
           name: id
@@ -938,11 +938,11 @@ components:
           example: 1
         name:
           type: string
-          example: Category 1
+          example: Testimonial 1
     TestimonialPaginatedDTO:
       type: object
       properties:
-        categories:
+        testimonials:
           type: array
           items:
             $ref: '#/components/schemas/TestimonialSimplifiedDTO'
@@ -1028,7 +1028,27 @@ components:
           example: 4
         organizationId:
           type: integer
+          example: 1
+        name:
+          type: string
+          example: LOGO-SOMOS-MAS4
+    SlideResponseObject:
+      type: object
+      required:
+        - name
+      properties:
+        imageUrl:
+          type: string
+          example: "https://cohorte-enero-835eb560.s3.amazonaws.com/LOGO-S.png"
+        text:
+          type: string
+          example: description 4
+        order:
+          type: integer
           example: 4
+        organizationId:
+          type: integer
+          example: 1
         name:
           type: string
           example: LOGO-SOMOS-MAS4
@@ -1271,12 +1291,24 @@ components:
                     example: Member with id 17 deleted successfully.
 
     NewsResponse:
-      description: A json data response for novently
+      description: A json data response for news
       content:
         application/json:
           schema:
             type: object
             properties:
+              data:
+                $ref: '#/components/schemas/News'
+    NewsUpdateResponse:
+      description: A json data response for news
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              msg: 
+                type: string
+                example: "Updated successfully"
               data:
                 $ref: '#/components/schemas/News'
     NewPaginated:
@@ -1318,7 +1350,7 @@ components:
             type: object
             properties:
               data:
-                $ref: '#/components/schemas/SlideObject'
+                $ref: '#/components/schemas/SlideResponseObject'
 
   securitySchemes:
     BearerAuth:
@@ -1328,6 +1360,16 @@ components:
       description: 'note: non-oauth scopes are not defined at the securityScheme level'
 
 tags:
-  - name: authorization
+  - name: Authorization
   - name: Categories
     description: Categories CRUD
+  - name: News
+    description: News CRUD
+  - name: Activities
+    description: Activities CRUD
+  - name: Testimonials
+    description: Testimonials CRUD
+  - name: Members
+    description: Members CRUD
+  - name: Slides
+    description: Slides CRUD
