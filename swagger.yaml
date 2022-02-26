@@ -214,7 +214,7 @@ paths:
         - BearerAuth: []
 
   /organization/public:
-   get:
+    get:
       summary: Get public data from organization
       tags:
         - Organization
@@ -230,7 +230,7 @@ paths:
           description: Insufficient permissions.
         '404':
           $ref: '#/components/responses/EntityNotFound'
-   post:
+    post:
       summary: Updates organization public data
       tags:
         - Organization
@@ -441,7 +441,7 @@ paths:
           $ref: '#/components/responses/GenericError'
         '500':
           $ref: '#/components/responses/GenericError'
-          
+
   /testimonials:
     get:
       summary: Get testimonials paginated list.
@@ -901,10 +901,57 @@ paths:
           $ref: '#/components/responses/EntityNotFound'
       security:
         - BearerAuth: []
-
+  /news/{id}/comments:
+    get:
+      summary: list all comments
+      tags:
+        - News
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Comments retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        userId:
+                          type: number
+                          example: 1
+                        postId:
+                          type: number
+                          example: 1
+                        body:
+                          type: string
+                          example: some large string of text
+                        createdAt:
+                          type: string
+                          example: 2022-02-24T18:29:45.000Z
+                        updatedAt:
+                          type: string
+                          example: 2022-02-24T18:29:45.000Z
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          $ref: '#/components/responses/EntityNotFound'
 
   /contacts:
-   get:
+    get:
       summary: Get a list of contacts.
       tags:
         - Contacts
@@ -913,14 +960,14 @@ paths:
         '200':
           description: List of contacts.
           content:
-             application/json:
-               schema:               
+            application/json:
+              schema:
                 type: object
                 properties:
-                 data:
-                  type: array
-                  items:
-                   $ref: '#/components/schemas/ContactForm'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ContactForm'
         '400':
           $ref: '#/components/responses/ValidationErrors'
         '401':
@@ -929,7 +976,7 @@ paths:
           description: Insufficient permissions.
       security:
         - BearerAuth: []
-   post:
+    post:
       summary: Create new register of contact.
       tags:
         - Contacts
@@ -941,21 +988,228 @@ paths:
         required: true
       responses:
         '201':
-           description: Contact created
-           content:
-               application/json:             
-                schema:                           
-                 type: object
-                 properties:
+          description: Contact created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
                   data:
-                   $ref: '#/components/schemas/ContactForm'  
+                    $ref: '#/components/schemas/ContactForm'
         '400':
           $ref: '#/components/responses/ValidationErrors'
         '401':
           description: Token missing in header.
         '403':
-          description: Insufficient permissions.   
+          description: Insufficient permissions.
 
+  /comments:
+    get:
+      summary: List all comments
+      tags:
+        - Comments
+      responses:
+        '200':
+          description: list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  comments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        body:
+                          type: string
+                          example: some large string of text
+                        createdAt:
+                          type: string
+                          example: 2022-02-24T18:29:45.000Z
+                        updatedAt:
+                          type: string
+                          example: 2022-02-24T18:29:45.000Z
+                        news:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                              example: 3
+                            name:
+                              type: string
+                              example: paulo coelho shit writer
+                        user:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                              example: 5
+                            firstName:
+                              type: string
+                              example: someuser1
+                            image:
+                              type: string
+                              example: https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png
+                  metadata:
+                    type: object
+                    properties:
+                      lastPage:
+                        type: number
+                        example: 3
+                      currentPage:
+                        type: number
+                        example: 1
+                      previousPage:
+                        type: number
+                        example: null
+                      nextPage:
+                        type: number
+                        example: 2
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          $ref: '#/components/responses/GenericError'
+    post:
+      summary: Create new comment
+      tags:
+        - Comments
+      requestBody:
+        description: information of the comment to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                postId:
+                  type: number
+                  example: 1
+                userId:
+                  type: number
+                  example: 1
+                body:
+                  type: string
+                  example: blablablabla
+      responses:
+        '200':
+          description: comment successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 6
+                  postId:
+                    type: number
+                    example: 2
+                  userId:
+                    type: number
+                    example: 1
+                  body:
+                    type: string
+                    example: blablalblalb
+                  createdAt:
+                    type: string
+                    example: 2022-02-24T18:29:45.000Z
+                  updatedAt:
+                    type: string
+                    example: 2022-02-24T18:29:45.000Z
+
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          $ref: '#/components/responses/GenericError'
+  /comments/{id}:
+    put:
+      summary: update comment
+      tags:
+        - Comments
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        description: information of the comment to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+                  example: updated
+      responses:
+        '200':
+          description: comment successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 6
+                  postId:
+                    type: number
+                    example: 2
+                  userId:
+                    type: number
+                    example: 1
+                  body:
+                    type: string
+                    example: updated
+                  createdAt:
+                    type: string
+                    example: 2022-02-24T18:29:45.000Z
+                  updatedAt:
+                    type: string
+                    example: 2022-02-24T18:29:45.000Z
+        '400':
+          $ref: '#/components/responses/ValidationErrors'
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          $ref: '#/components/responses/EntityNotFound'
+        '500':
+          $ref: '#/components/responses/GenericError'
+    delete:
+      summary: update comment
+      tags:
+        - Comments
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '204':
+          description: successfully deleted
+        '401':
+          description: Token missing in header.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          $ref: '#/components/responses/EntityNotFound'
+        '500':
+          $ref: '#/components/responses/GenericError'
 
 components:
   schemas:
@@ -1238,7 +1492,7 @@ components:
       properties:
         imageUrl:
           type: string
-          example: "https://cohorte-enero-835eb560.s3.amazonaws.com/LOGO-S.png"
+          example: 'https://cohorte-enero-835eb560.s3.amazonaws.com/LOGO-S.png'
         text:
           type: string
           example: description 4
@@ -1331,65 +1585,65 @@ components:
           items:
           $ref: '#/components/schemas/NewsSimplifiedDTO'
 
-    Organization: 
-      type: object 
-      properties:      
-             name:
-              type: string
-              example: Somos Más
-             phone:
-              type: integer
-              example: 1160112988
-             address:
-              type: string
-              example: Av. Velez Sarsfield 1234
-             url_facebook:
-              type: string
-              example: https://www.facebook.com/somosmas
-             url_linkedin:
-              type: string
-              example: https://linkedin.com/somosmas
-             url_instagram:
-              type: string
-              example: https://linkedin.com/somosmas
-             image:
-              type: string
-              example: https://i.imgur.com/example-activity.jpg
-             Slides: 
-              type: array
-              items:
-               $ref: '#/components/schemas/SlideResponseObject'
-    OrganizationUpdate: 
-      type: object 
-      properties:      
-             name:
-              type: string
-              example: Somos Más
-             phone:
-              type: integer
-              example: 1160112988
-             welcomeText:
-              type: string
-              example: welcome 
-             aboutUsText:
-              type: string 
-              example: about
-             address:
-              type: string
-              example: Av. Velez Sarsfield 1234
-             url_facebook:
-              type: string
-              example: https://www.facebook.com/somosmas
-             url_linkedin:
-              type: string
-              example: https://linkedin.com/somosmas
-             url_instagram:
-              type: string
-              example: https://linkedin.com/somosmas
-             image:
-              type: string
-              example: https://i.imgur.com/example-activity.jpg           
-    ContactForm: 
+    Organization:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Somos Más
+        phone:
+          type: integer
+          example: 1160112988
+        address:
+          type: string
+          example: Av. Velez Sarsfield 1234
+        url_facebook:
+          type: string
+          example: https://www.facebook.com/somosmas
+        url_linkedin:
+          type: string
+          example: https://linkedin.com/somosmas
+        url_instagram:
+          type: string
+          example: https://linkedin.com/somosmas
+        image:
+          type: string
+          example: https://i.imgur.com/example-activity.jpg
+        Slides:
+          type: array
+          items:
+            $ref: '#/components/schemas/SlideResponseObject'
+    OrganizationUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Somos Más
+        phone:
+          type: integer
+          example: 1160112988
+        welcomeText:
+          type: string
+          example: welcome
+        aboutUsText:
+          type: string
+          example: about
+        address:
+          type: string
+          example: Av. Velez Sarsfield 1234
+        url_facebook:
+          type: string
+          example: https://www.facebook.com/somosmas
+        url_linkedin:
+          type: string
+          example: https://linkedin.com/somosmas
+        url_instagram:
+          type: string
+          example: https://linkedin.com/somosmas
+        image:
+          type: string
+          example: https://i.imgur.com/example-activity.jpg
+    ContactForm:
       type: object
       required:
         - name
@@ -1584,9 +1838,9 @@ components:
           schema:
             type: object
             properties:
-              msg: 
+              msg:
                 type: string
-                example: "Updated successfully"
+                example: 'Updated successfully'
               data:
                 $ref: '#/components/schemas/News'
     NewPaginated:
@@ -1623,10 +1877,10 @@ components:
       description: List of Activities
       content:
         application/json:
-          schema:            
-              type: array
-              items:
-               $ref: '#/components/schemas/Activity'
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Activity'
     ActivityDeleted:
       description: Success deleted message
       content:
@@ -1635,8 +1889,8 @@ components:
             type: object
             properties:
               deleteStatus:
-                 type: string
-                 example: Activity with id 11 removed successfully         
+                type: string
+                example: Activity with id 11 removed successfully
 
     EntityNotFound:
       description: Error message when required entity doesn't exists in database.
@@ -1657,17 +1911,17 @@ components:
             properties:
               data:
                 $ref: '#/components/schemas/SlideResponseObject'
-    
+
     OrganizationResponse:
-       description: A public data response for organization
-       content:
-         application/json:
-            schema:
-             type: object
-             properties:
-               data:
+      description: A public data response for organization
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
                 $ref: '#/components/schemas/Organization'
-                
+
     ActivityUpdated:
       description: A json data response for activity
       content:
@@ -1680,11 +1934,10 @@ components:
       description: List of Contacts
       content:
         application/json:
-          schema:            
-              type: array
-              items:
-               $ref: '#/components/schemas/ContactForm'  
-   
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ContactForm'
 
   securitySchemes:
     BearerAuth:
@@ -1695,7 +1948,7 @@ components:
 
 tags:
   - name: Authorization
-  - name: Organization 
+  - name: Organization
   - name: Categories
     description: Categories CRUD
   - name: News
