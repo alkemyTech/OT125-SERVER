@@ -21,7 +21,7 @@ module.exports.SequelizeErrorParser = (error) => {
       case 'SequelizeForeignKeyConstraintError':
         errResult = {
           statusCode: 400,
-          message: `One or more of the provided ids, doesn't corresponds to an ${
+          message: `One or more of the provided ids, doesn't correspond to an ${
             entity?.name || ''
           }.`,
         };

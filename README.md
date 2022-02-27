@@ -51,3 +51,21 @@ Users seeded:
 
 - email: test{11-20}@test.com
 - password: 1234
+
+## Docker
+
+- Copy docker.env.example to docker.env and fill with corresponding credentials.
+
+- Start with `make runDev` or `make runBuild` (rebuilds containers)
+
+- Migrations:
+
+```bash
+make migrate
+```
+
+- Seeds:
+
+```bash
+make seed
+```

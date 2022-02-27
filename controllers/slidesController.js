@@ -7,7 +7,7 @@ let slidesController = {
   create: async function (req, res) {
     try {
       const data = await repo.create(req.body);
-      res.json(data.reponse).status(data.statusCode)
+      res.json(data.response).status(data.statusCode)
     } catch (error) {
       res.json({ msg: error }).status(500)
     }
