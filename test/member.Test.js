@@ -5,10 +5,61 @@ var request = require('supertest')(app);
 const admCredentials = { email: "test1@test.com", password: '1234' }
 
 
+describe('#GET /members', async function () {
+  const test = {
+    expectedStatus: 200
+  };
+
+  let jwtToken;
+  before((done) => {
+    request
+      .post('/auth/login')
+      .send(admCredentials)
+      .end((err, res) => {
+        if (err) done(err);
+        jwtToken = res.body.token;
+        done()
+      })
+  })
+  it('should get a list of  member successfully',  function (done) {
+   request
+      .get('/members')
+      .query({ page: 1 })
+      .set('Authorization', 'Bearer ' + jwtToken)
+      .expect(test.expectedStatus,done)
+  });
+
+  
+  
+   //Testing Error handler 
+   const testError = {
+    
+    expected: {
+      errors: [
+        {
+          "msg": "Member with page 22 doesn't exist."
+        }
+      ]
+    },
+    _page: 22,
+    expectedStatus: 404,
+    description: 'if the page of member does not exist  returns an  error message'
+  };
+  it(testError.description, function (done) {
+    request
+      .get('/members')
+      .query({ page: 22 })
+      .set('Authorization', 'Bearer ' + jwtToken)
+      .send(testError.body)
+      .expect(testError.expectedStatus, done)
+  });
+}); 
+
+
  describe('#POST /members', async function () {
   const test = {
     body: {
-      name: "member 6",
+      name: "Member 6",
       facebookUrl: "https://www.facebook.com/member",
       instagramUrl:"https://www.instagram.com/member" ,
       linkedinUrl: "https://www.linkedIn.com/member",
@@ -17,7 +68,7 @@ const admCredentials = { email: "test1@test.com", password: '1234' }
     },
     expected: {
       id: 6,
-      name: "member 6",
+      name: "Member 6",
       facebookUrl: "https://www.facebook.com/member",
       instagramUrl:"https://www.instagram.com/member" ,
       linkedinUrl: "https://www.linkedIn.com/member",
@@ -50,7 +101,7 @@ const admCredentials = { email: "test1@test.com", password: '1234' }
   //Testing error handler
    const testError = {
     body: {
-      name: 'Member 1',
+      name: 'Member 1 ',
       facebookUrl: "https://www.facebook.com/member",
       instagramUrl:"https://www.instagram.com/member" ,
       linkedinUrl: "https://www.linkedIn.com/member",
