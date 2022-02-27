@@ -35,7 +35,7 @@ describe('#GET /testimonials', async function () {
     expected: {
       errors: [
         {
-          "msg": "Testimonial with page 22 doesn't exists."
+          "msg": "Testimonial with page 22 doesn't exist."
         }
       ]
     },
