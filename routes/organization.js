@@ -1,18 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/orgController');
-const isAdminMIddleware=require('../Middleware/isAdmin');
+const validation = require('../middleware/orgValidation');
+const isAdmin = require('../middleware/isAdmin');
+const auth = require('../middleware/authenticate');
 
 
-router.get('/', controller.orgGet);
+router.get('/public/', controller.orgGetOne);
 
-router.get('/:id',isAdminMIddleware, controller.orgGetOne);
-
-router.post('/',isAdminMIddleware ,controller.orgUpdate);
-
-router.delete('/:id',isAdminMIddleware ,controller.orgDelete);
-
-router.patch('/:id', isAdminMIddleware, controller.orgUpdate);
+router.post('/public/', auth, isAdmin, validation.updateValidation, controller.orgUpdate);
 
 
 module.exports = router;

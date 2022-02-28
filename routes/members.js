@@ -1,20 +1,22 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const validator =require('../middleware/membersValidator')
 
-const membersControllers= require('../controllers/members');
-const isAdminMIddleware=require('../Middleware/isAdmin');
+const membersControllers = require('../controllers/members');
+const auth = require('../middleware/authenticate');
+const isAdmin = require('../middleware/isAdmin');
+
+router.use(auth,isAdmin);
+
+router.get('/',membersControllers.findAll);
+router.get('/:id', validator.validateId,membersControllers.findOne);
 
 
-router.get('/', membersControllers.create);
+router.post('/',validator.Vcreate, membersControllers.create);
 
-router.post('/create',isAdminMIddleware,membersControllers.store);
+router.put('/:id',validator.validateId, membersControllers.update);
 
-router.get('/edit/:id', membersControllers.edit);
-
-router.put('/edit/:id',isAdminMIddleware,membersControllers.update);
-
-router.delete('/destroy/:id',isAdminMIddleware,membersControllers.destroy);
-
+router.delete('/:id',validator.validateId, membersControllers.destroy);
 
 
 module.exports = router;

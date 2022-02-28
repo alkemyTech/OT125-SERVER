@@ -1,6 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 const Password = require('../services/passwords');
+const welcomeEmail = require('../services/email')
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -35,8 +36,16 @@ module.exports = (sequelize, DataTypes) => {
         beforeCreate: async function (user) {
           user.password = await Password.toHash(user.password);
         },
-      },
-    }
+        afterCreate: function( user){
+          try{
+             welcomeEmail.welcomeEmail(user)
+          }
+          catch(e){
+            console.log(e);;
+          }
+        }
+      }
+    },
   );
   return User;
 };

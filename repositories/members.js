@@ -1,0 +1,118 @@
+const { Member } = require('../models/index');
+const { handleError } = require('../utils/errorHandler');
+
+exports.create = async (member, cb) => {
+  Member.findOrCreate({
+    where: {
+      name: member.name,
+    },
+    defaults: {
+      name: member.name,
+      facebookUrl: member.facebookUrl,
+      instagramUrl: member.instagramUrl,
+      linkedinUrl: member.linkedinUrl,
+      image: member.image,
+      description: member.description
+    }
+  })
+    .then((result) => {
+      if (!result[1]) {
+        let err = new Error(`Activity already exists`);
+        err.name = 'duplicated_entry';
+        err.entity={name:'member',key:'name',keyValue:member.name}
+        errJSON = handleError(err)
+        return cb([null,errJSON])
+
+      }
+      return cb([result[0],null]);
+    })
+    .catch((err) => {
+      errJSON = handleError(err);
+      return cb([null,errJSON]);
+    });
+};
+
+exports.getAll = async({ limit, offset })=>{
+  try {
+    const attr = ['id', 'name','facebookUrl','instagramUrl','linkedinUrl','description'];
+    const result = await Member.findAndCountAll({ attributes: attr, limit, offset })
+    return result
+
+  } catch (e) {
+    errJSON = handleError(e);
+    return errJSON;
+  }
+}
+
+exports.getOne = async(_id)=>{
+  try {
+    const result = await Member.findByPk(_id)
+    if (!result){
+      let err = new Error(`not_found`);
+      err.name = 'not_found';
+      err.entity={name:'Member',key:'id',keyValue:_id};
+      errJSON = handleError(err)
+      return [null,errJSON]
+
+    }
+    return [result, null];
+
+  } catch (e) {
+    errJSON = handleError(e);
+    return [null, errJSON];
+  }
+}
+
+exports.setOne = async (_id, body, cb) => {
+  Member.update(
+    {
+      name: body.name,
+      facebookUrl: body.facebookUrl,
+      instagramUrl: body.instagramUrl,
+      linkedinUrl: body.linkedinUrl,
+      image: body.image,
+      description: body.description
+    }, {
+    where: {
+      id: _id
+    }
+  })
+    .then(result => {
+      if (result == 0) {
+        let err = new Error(`not_found`);
+        err.name = 'not_found';
+        err.entity={name:'Member',key:'id',keyValue:_id};
+        errJSON = handleError(err)
+        return cb([null,errJSON])
+      }
+      return cb([body,null])
+
+    })
+    .catch(err => {
+      errJSON = handleError(err)
+      return cb([null,errJSON])
+    })
+}
+
+exports.delete = async (_id) => {
+  try{
+    [result,err] = await this.getOne(_id)
+    if (err){
+      let err = new Error(`not_found`);
+      err.name = 'not_found';
+      err.entity={name:'Activity',key:'id',keyValue:_id};
+      errJSON = handleError(err)
+      return [null,errJSON]
+    }else{
+      result.destroy().then(deleted => deleted)
+      let response = { statusCode: 202, message: { deleteStatus: `Member with id ${_id} deleted successfully.` } }
+      return [response,null]
+    }
+
+  }catch(err){
+    errJSON = handleError(err);
+    return [null,errJSON]
+
+  }
+
+}

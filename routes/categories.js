@@ -1,20 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/CategoryController');
-const isAdminMIddleware=require('../Middleware/isAdmin');
+const { createValidator, getOneValidator, getAllValidator, updateValidator, } = require('../middleware/categoryValidation');
+const isAdmin = require('../middleware/isAdmin');
+const auth = require('../middleware/authenticate');
 
 /* GET categories */
-router.get('/',controller.getCategories);
-router.get('/:id',controller.getCategory);
+router.use(auth, isAdmin);
+
+router.get('/', getAllValidator, controller.getCategories);
+router.get('/:id', getOneValidator, controller.getCategory);
 
 /* POST categories */
-router.post('/:id',isAdminMIddleware,controller.createCategory);
+router.post('/', createValidator, controller.createCategory);
 
-/* PATCH categories */
-router.patch('/:id',isAdminMIddleware,controller.updateCategory);
+/* PUT categories */
+router.put('/:id', updateValidator, controller.updateCategory);
 
 /* DELETE categories */
-router.delete('/:id',isAdminMIddleware,controller.deleteCategory);
-
+router.delete('/:id', controller.deleteCategory);
 
 module.exports = router;

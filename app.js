@@ -7,7 +7,7 @@ var methodOverride = require('method-override');
 const cors = require('cors');
 require('dotenv').config();
 
-const indexRouter = require('./routes/index');
+const rolesRouter = require('./routes/role');
 const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
 const categoryRouter = require('./routes/categories');
@@ -15,8 +15,10 @@ const newsRouter = require('./routes/news');
 const testimonialsRouter = require('./routes/testimonials');
 const orgRouter = require('./routes/organization');
 const slidesRouter = require('./routes/slides');
-const membersRouter=require('./routes/members');
-
+const membersRouter = require('./routes/members');
+const ActivitiesRouter = require('./routes/activities');
+const commentRouter = require('./routes/comment');
+const contactRouter = require('./routes/contacts');
 const app = express();
 app.use(cors());
 
@@ -31,16 +33,24 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
 
-
-app.use('/', indexRouter);
+app.use('/roles', rolesRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/categories', categoryRouter);
 app.use('/news', newsRouter);
 app.use('/testimonials', testimonialsRouter);
-app.use('/organizations', orgRouter);
+app.use('/organization', orgRouter);
 app.use('/slides', slidesRouter);
-app.use('/members',membersRouter);
+app.use('/members', membersRouter);
+app.use('/activities', ActivitiesRouter);
+app.use('/comments', commentRouter);
+app.use('/contacts', contactRouter);
+
+//Swagger docs
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerFile = YAML.load('./swagger.yaml');
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

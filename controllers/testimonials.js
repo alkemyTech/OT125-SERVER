@@ -1,28 +1,41 @@
-const db = require('../models/testimonial');
+const repo = require('../repositories/testimonial');
+const service = require('../services/testimonials')
 
-let testimonialsControllers={
+const testimonialsController = {
 
-    create:function(req, res, next) {
-        res.send('Testimonials-creation');
-      },
+  create: async function (req, res) {
+    try {
+      const data = await repo.createTestimonial(req.body);
+      res.json(data.response).status(data.statusCode)
+    } catch (error) {
+      res.json({ msg: error }).status(500)
+    }
+  },
 
-    store:function(req,res,next){
-      res.send('Testimonials -reading');
-    },
+  getTestimonials: (req, res) => {
+    service.getTestimonials(req.query.page).then(({ statusCode, response }) => {
+        res.status(statusCode).json(response)
+    }).catch(err => {
+        res.status(500).json({ error: err })
+    })
+  },
 
-    edit:function(req,res,next){
-      res.send('Testimonials get  editions');
-    },
+  update: async function (req, res, next) {
+    const data = await repo.updateTestimonial(req.params.id, req.body);
+    res.json(data.response).status(data.statusCode);
 
-    update:function(req,res,next){
-      res.send('Testimonials update');
-    },
+  },
 
-    destroy:function(req,res,next){
-      res.send('Testimonials deleted');
-    },
+  destroy: function (req, res, next) {
+    const { id } = req.params;
+    repo.deleteTestimonial(id).then(({ statusCode, response }) => {
+      res.status(statusCode).json(response);
+    }).catch(err => {
+      res.status(500).json({ error: err })
+    });
+  }
+}
 
- 
-};
 
-module.exports = testimonialsControllers;
+
+module.exports = testimonialsController;

@@ -1,23 +1,48 @@
+const repo = require('../repositories/category')
+const service = require('../services/categories')
+
+
 module.exports = {
-
     createCategory: (req, res) => {
-
+        repo.createCategory(req.body).then(({ statusCode, response }) => {
+            res.status(statusCode).json(response)
+        }).catch(err => {
+            res.status(500).json({ error: err })
+        })
     },
 
     getCategories: (req, res) => {
-       res.json({msg:"controller working"})
+        service.getCategories(req.query.page).then(({ statusCode, response }) => {
+            res.status(statusCode).json(response)
+        }).catch(err => {
+            res.status(500).json({ error: err })
+        })
     },
 
     getCategory: (req, res) => {
-
+        repo.getCategory(req.params.id).then(({ statusCode, response }) => {
+            res.status(statusCode).json(response)
+        }).catch(err => {
+            res.status(500).json({ error: err })
+        })
     },
 
     updateCategory: (req, res) => {
-
+      repo.updateCategory({
+          category: req.body, id: req.params.id
+      }).then(({ statusCode, response }) => {
+        res.status(statusCode).json(response)
+      }).catch(err => {
+          res.status(500).json({ error: err })
+      })
     },
 
     deleteCategory: (req, res) => {
-
+        repo.deleteCategory(req.params.id).then(({ statusCode, response }) => {
+            res.status(statusCode).json(response)
+        }).catch(err => {
+            res.status(500).json({ error: err })
+        })
     }
 
 }
